@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
@@ -124,7 +124,7 @@
     <div id="registerChoicePage" class="page">
         <h2>রেজিস্ট্রেশন ধরণ নির্বাচন করুন</h2>
         <div class="choice-box">
-            <button class="btn-blue" onclick="showPage('merchantRegistrationPage')">মার्चেন্ট / দোকানদার রেজিস্ট্রেশন</button>
+            <button class="btn-blue" onclick="showPage('merchantRegistrationPage')">মার্চেন্ট / দোকানদার রেজিস্ট্রেশন</button>
             <button class="btn-secondary" onclick="showPage('customerRegistrationPage')">ক্রেতা / সাধারণ গ্রাহক রেজিস্ট্রেশন</button>
             <button class="btn-secondary" onclick="showPage('riderRegistrationPage')" style="background-color: #17a2b8;">ডেলিভারি রাইডার / পার্সেল রেজিস্ট্রেশন</button>
             <div style="margin-top: 15px;">
@@ -457,7 +457,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
-  import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-database.js";
+  import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBtbJD8cMeaM839y9sL3wrKPYSXsg_XelE",
@@ -472,6 +472,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
+  // ফায়ারবেসে ইউজার সেভ ফাংশন
   window.saveUserToFirebase = function(roleFolder, username, userData, callback) {
       let cleanUsername = username.replace(/[.#$[\]]/g, "_");
       set(ref(db, roleFolder + "/" + cleanUsername), userData)
@@ -481,6 +482,70 @@
       .catch((error) => {
           alert("ফায়ারবেস সেভ এরর: " + error.message);
           if(callback) callback(false);
+      });
+  };
+
+  // ফায়ারবেস থেকে সরাসরি ইউজার লগইন ভেরিফিকেশন
+  window.loginUserWithFirebase = function(inputUsername, inputPassword) {
+      let cleanUsername = inputUsername.replace(/[.#$[\]]/g, "_");
+      const dbRef = ref(db);
+      
+      let roles = ['merchants', 'customers', 'riders'];
+      let userFound = false;
+
+      let promises = roles.map(role => {
+          return get(child(dbRef, `${role}/${cleanUsername}`)).then(snapshot => {
+              if (snapshot.exists()) {
+                  let userObj = snapshot.val();
+                  if (userObj.pass === inputPassword) {
+                      return userObj;
+                  }
+              }
+              return null;
+          });
+      });
+
+      Promise.all(promises).then(results => {
+          let matchedUser = results.find(u => u !== null);
+          if (matchedUser) {
+              // স্থানীয় স্টোরেজে সিঙ্ক করা
+              let users = JSON.parse(localStorage.getItem('cg_all_users') || '[]');
+              if(!users.find(u => u.username === matchedUser.username)) {
+                  users.push(matchedUser);
+                  localStorage.setItem('cg_all_users', JSON.stringify(users));
+              }
+              localStorage.setItem('cg_active_user', JSON.stringify(matchedUser));
+              
+              // ড্যাশবোর্ডে রিডাইরেক্ট
+              if(matchedUser.role === 'customer') {
+                  document.getElementById('custWelcomeText').innerText = matchedUser.name + " - ক্রেতা ড্যাশবোর্ড";
+                  showPage('customerDashboardPage');
+                  loadRegisteredMerchantInfo();
+                  loadCustomerQuotations();
+                  loadCustomerPortalData();
+                  loadCustomerDueData();
+                  loadCustomerNotifications();
+              } else if(matchedUser.role === 'merchant') {
+                  document.getElementById('welcomeText').innerText = (matchedUser.shop || 'আমার দোকান') + " - মার্চেন্ট ড্যাশবোর্ড";
+                  showPage('dashboardPage');
+                  loadMerchantIncomingOrders();
+                  loadMerchantAcceptedOrders();
+                  loadMerchantOrderBox();
+                  loadMerchantCodOrders();
+                  loadMerchantArchiveInvoices();
+                  loadMerchantDueCustomers();
+                  loadMerchantNotifications();
+              } else if(matchedUser.role === 'rider') {
+                  document.getElementById('riderWelcomeText').innerText = matchedUser.name + " - রাইডার ড্যাশবোর্ড";
+                  showPage('riderDashboardPage');
+                  loadRiderTasks();
+                  loadRiderNotifications();
+              }
+          } else {
+              alert('ভুল ইউজার নাম বা পাসওয়ার্ড!');
+          }
+      }).catch(error => {
+          alert('ফায়ারবেস লোডিং এরর: ' + error.message);
       });
   };
 </script>
@@ -911,7 +976,7 @@
 
     function numberToWordsBangla(num) {
         if(isNaN(num) || num <= 0) return "শূন্য টাকা মাত্র";
-        let unitsList = ['', 'এক', 'দুই', 'তিন', 'চার', 'পাঁচ', 'ছয়', 'সাত', 'আট', 'নয়', 'দশ', 'এগারো', 'বারো', 'তেরো', 'চৌদ্দ', 'পনেরো', 'ষোল', 'সতেরো', 'আঠারো', 'উনিশ', 'বিশ', 'একুশ', 'বাইশ', 'তেইশ', 'চব্বিশ', 'পঁচিশ', 'ছব্বিশ', 'সাতাশ', 'আটাশ', 'ঊনত্রিশ', 'ত্রিশ', 'একত্রিশ', 'বত্রিশ', 'তেত্রিশ', 'চৌত্রিশ', 'পঁয়ত্রিশ', 'ছত্রিশ', 'সঁয়ত্রিশ', 'আটত্রিশ', 'ঊনচল্লিশ', 'চল্লিশ', 'একচল্লিশ', 'বিচল্লিশ', 'তেচল্লিশ', 'চুয়াল্লিশ', 'পঁয়তাল্লিশ', 'ছেচল্লিশ', 'সতচল্লিশ', 'আটচল্লিশ', 'ঊনপঞ্চাশ', 'পঞ্চাশ', 'একান্ন', 'বায়ান্ন', 'তিপ্পান্ন', 'চুয়ান্ন', 'প পঞ্চান্ন', 'ছাপ্পান্ন', 'সাতান্ন', 'আটান্ন', 'ঊনষাট', 'ষাট', 'একষষ্টি', 'বাষষ্টি', 'তেষষ্টি', 'চৌষষ্টি', 'পঁয়ষষ্টি', 'ছেষষ্টি', 'সটষষ্টি', 'আটষষ্টি', 'ঊনসত্তর', 'সত্তর', 'একাত্তর', 'বাহাত্তর', 'তিয়াত্তর', 'চুয়াত্তর', 'পঁচাত্তর', 'ছিয়াত্তর', 'সাতাত্তর', 'আটাত্তর', 'ঊনআশি', 'আশি', 'একাসি', 'বিয়াসি', 'তিয়াসি', 'চৌআশি', 'পঁচাশি', 'ছিয়াশি', 'সাতাশি', 'আட்டாশি', 'ঊননব্বই', 'নব্বই', 'একানব্বই', 'বিরানব্বই', 'তিরানব্বই', 'চৌরানব্বই', 'পঁচানব্বই', 'ছিয়ানব্বই', 'সাতানব্বই', 'আটানব্বই', 'নিরানব্বই'];
+        let unitsList = ['', 'এক', 'দুই', 'তিন', 'চার', 'পাঁচ', 'ছয়', 'সাত', 'আট', 'নয়', 'দশ', 'এগারো', 'বারো', 'তেরো', 'চৌদ্দ', 'পনেরো', 'ষোল', 'সতেরো', 'আঠারো', 'উনিশ', 'বিশ', 'একুশ', 'বাইশ', 'তেইশ', 'চব্বিশ', 'পঁচিশ', 'ছব্বিশ', 'সাতাশ', 'আটাশ', 'ঊনত্রিশ', 'ত্রিশ', 'একত্রিশ', 'বত্রিশ', 'তেচল্লিশ', 'চৌত্রিশ', 'পঁয়ত্রিশ', 'ছত্রিশ', 'সঁয়ত্রিশ', 'আটত্রিশ', 'ঊনচল্লিশ', 'চল্লিশ', 'একচল্লিশ', 'বিচল্লিশ', 'তেচল্লিশ', 'চুয়াল্লিশ', 'পঁয়তাল্লিশ', 'ছেচল্লিশ', 'সতচল্লিশ', 'আটচল্লিশ', 'ঊনপঞ্চাশ', 'পঞ্চাশ', 'একান্ন', 'বায়ান্ন', 'তিপ্পান্ন', 'চুয়ান্ন', 'প পঞ্চান্ন', 'ছাপ্পান্ন', 'সাতান্ন', 'আটান্ন', 'ঊনষাট', 'ষাট', 'একষষ্টি', 'বাষষ্টি', 'তেষষ্টি', 'চৌষষ্টি', 'পঁয়ষষ্টি', 'ছেষষ্টি', 'সটষষ্টি', 'আটষষ্টি', 'ঊনসত্তর', 'সত্তর', 'একাত্তর', 'বাহাত্তর', 'তিয়াত্তর', 'চুয়াত্তর', 'পঁচাত্তর', 'ছিয়াত্তর', 'সাতাত্তর', 'আটাত্তর', 'ঊনআশি', 'আশি', 'একাসি', 'বিয়াসি', 'তিয়াসি', 'চৌআশি', 'পঁচাশি', 'ছিয়াশি', 'সাতাশি', 'আট্টাশি', 'ঊননব্বই', 'নব্বই', 'একানব্বই', 'বিরানব্বই', 'তিরানব্বই', 'চৌরানব্বই', 'পঁচানব্বই', 'ছিয়ানব্বই', 'সাতানব্বই', 'আটানব্বই', 'নিরানব্বই'];
         
         function convert(n) {
             if (n < 100) return unitsList[n] || '';
@@ -1854,41 +1919,34 @@
         });
     }
 
+    // লগইন ফরম হ্যান্ডলার (ফায়ারবেস চেকসহ)
     const loginForm = document.getElementById('loginForm');
     if(loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            let users = JSON.parse(localStorage.getItem('cg_all_users') || '[]');
-            let foundUser = users.find(u => u.username === document.getElementById('loginUsername').value.trim() && u.pass === document.getElementById('loginPassword').value.trim());
+            let uName = document.getElementById('loginUsername').value.trim();
+            let uPass = document.getElementById('loginPassword').value.trim();
 
-            if(foundUser) {
-                localStorage.setItem('cg_active_user', JSON.stringify(foundUser));
-                if(foundUser.role === 'customer') {
-                    document.getElementById('custWelcomeText').innerText = foundUser.name + " - ক্রেতা ড্যাশবোর্ড";
-                    showPage('customerDashboardPage');
-                    loadRegisteredMerchantInfo();
-                    loadCustomerQuotations();
-                    loadCustomerPortalData();
-                    loadCustomerDueData();
-                    loadCustomerNotifications();
-                } else if(foundUser.role === 'merchant') {
-                    document.getElementById('welcomeText').innerText = (foundUser.shop || 'আমার দোকান') + " - মার্চেন্ট ড্যাশবোর্ড";
-                    showPage('dashboardPage');
-                    loadMerchantIncomingOrders();
-                    loadMerchantAcceptedOrders();
-                    loadMerchantOrderBox();
-                    loadMerchantCodOrders();
-                    loadMerchantArchiveInvoices();
-                    loadMerchantDueCustomers();
-                    loadMerchantNotifications();
-                } else if(foundUser.role === 'rider') {
-                    document.getElementById('riderWelcomeText').innerText = foundUser.name + " - রাইডার ড্যাশবোর্ড";
-                    showPage('riderDashboardPage');
-                    loadRiderTasks();
-                    loadRiderNotifications();
-                }
+            if(window.loginUserWithFirebase) {
+                window.loginUserWithFirebase(uName, uPass);
             } else {
-                alert('ভুল ইউজার নাম বা পাসওয়ার্ড!');
+                let users = JSON.parse(localStorage.getItem('cg_all_users') || '[]');
+                let foundUser = users.find(u => u.username === uName && u.pass === uPass);
+                if(foundUser) {
+                    localStorage.setItem('cg_active_user', JSON.stringify(foundUser));
+                    if(foundUser.role === 'customer') {
+                        document.getElementById('custWelcomeText').innerText = foundUser.name + " - ক্রেতা ড্যাশবোর্ড";
+                        showPage('customerDashboardPage');
+                    } else if(foundUser.role === 'merchant') {
+                        document.getElementById('welcomeText').innerText = (foundUser.shop || 'আমার দোকান') + " - মার্চেন্ট ড্যাশবোর্ড";
+                        showPage('dashboardPage');
+                    } else if(foundUser.role === 'rider') {
+                        document.getElementById('riderWelcomeText').innerText = foundUser.name + " - রাইডার ড্যাশবোর্ড";
+                        showPage('riderDashboardPage');
+                    }
+                } else {
+                    alert('ভুল ইউজার নাম বা পাসওয়ার্ড!');
+                }
             }
         });
     }
