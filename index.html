@@ -173,7 +173,7 @@
         <form id="merchantRegForm">
             <div class="form-group">
                 <label for="mRegUsername">ইউজার আইডি</label>
-                <input type="text" id="mRegUsername" placeholder="ইউজার আইডি লিখুন" required>
+                <input type="text" id="mRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" required>
             </div>
             
             <div class="form-group">
@@ -244,17 +244,23 @@
                 <input type="text" id="mTradeLicense" required placeholder="ট্রেড লাইসেন্স নাম্বার">
             </div>
 
+            <!-- বিভাগ ও জেলা একই লাইনে পাশাপাশি সাজানো হয়েছে -->
             <div class="address-group">
-              <label for="division">বিভাগ</label>
-              <input type="text" id="division" list="divisionList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
-              <datalist id="divisionList"></datalist>
+              <div class="row-fields">
+                  <div>
+                      <label for="division">বিভাগ</label>
+                      <input type="text" id="division" list="divisionList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
+                      <datalist id="divisionList"></datalist>
+                  </div>
+                  <div>
+                      <label for="district">জেলা</label>
+                      <input type="text" id="district" list="districtList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
+                      <datalist id="districtList"></datalist>
+                  </div>
+              </div>
 
-              <label for="district">জেলা</label>
-              <input type="text" id="district" list="districtList" placeholder="টাইপ করুন বা সিলেক্ট করুন" disabled required>
-              <datalist id="districtList"></datalist>
-
-              <label for="subDistrict">উপজেলা / সিটি কর্পোরেশন</label>
-              <input type="text" id="subDistrict" list="subDistrictList" placeholder="টাইপ করুন বা সিলেক্ট করুন" disabled required>
+              <label for="subDistrict" style="margin-top: 8px;">উপজেলা / সিটি কর্পোরেশন</label>
+              <input type="text" id="subDistrict" list="subDistrictList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
               <datalist id="subDistrictList"></datalist>
 
               <div id="subLocationContainer"></div>
@@ -299,7 +305,7 @@
         <form id="customerRegForm">
             <div class="form-group">
                 <label for="cRegUsername">ইউজার আইডি</label>
-                <input type="text" id="cRegUsername" placeholder="ইউজার আইডি লিখুন" required>
+                <input type="text" id="cRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" required>
             </div>
             
             <div class="form-group">
@@ -326,17 +332,23 @@
                 <input type="tel" id="cMobile" required placeholder="01XXXXXXXXX">
             </div>
 
+            <!-- বিভাগ ও জেলা একই লাইনে পাশাপাশি সাজানো হয়েছে -->
             <div class="address-group">
-              <label for="c_division">বিভাগ</label>
-              <input type="text" id="c_division" list="c_divisionList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
-              <datalist id="c_divisionList"></datalist>
+              <div class="row-fields">
+                  <div>
+                      <label for="c_division">বিভাগ</label>
+                      <input type="text" id="c_division" list="c_divisionList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
+                      <datalist id="c_divisionList"></datalist>
+                  </div>
+                  <div>
+                      <label for="c_district">জেলা</label>
+                      <input type="text" id="c_district" list="c_districtList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
+                      <datalist id="c_districtList"></datalist>
+                  </div>
+              </div>
 
-              <label for="c_district">জেলা</label>
-              <input type="text" id="c_district" list="c_districtList" placeholder="টাইপ করুন বা সিলেক্ট করুন" disabled required>
-              <datalist id="c_districtList"></datalist>
-
-              <label for="c_subDistrict">উপজেলা / সিটি কর্পোরেশন</label>
-              <input type="text" id="c_subDistrict" list="c_subDistrictList" placeholder="টাইপ করুন বা সিলেক্ট করুন" disabled required>
+              <label for="c_subDistrict" style="margin-top: 8px;">উপজেলা / সিটি কর্পোরেশন</label>
+              <input type="text" id="c_subDistrict" list="c_subDistrictList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
               <datalist id="c_subDistrictList"></datalist>
 
               <div id="c_subLocationContainer"></div>
@@ -379,7 +391,7 @@
         <form id="riderRegForm">
             <div class="form-group">
                 <label for="rRegUsername">ইউজার আইডি</label>
-                <input type="text" id="rRegUsername" placeholder="ইউজার আইডি লিখুন" required>
+                <input type="text" id="rRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" required>
             </div>
             
             <div class="form-group">
@@ -406,17 +418,23 @@
                 <input type="tel" id="rMobile" required placeholder="01XXXXXXXXX">
             </div>
 
+            <!-- বিভাগ ও জেলা একই লাইনে পাশাপাশি সাজানো হয়েছে -->
             <div class="address-group">
-              <label for="r_division">বিভাগ</label>
-              <input type="text" id="r_division" list="r_divisionList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
-              <datalist id="r_divisionList"></datalist>
+              <div class="row-fields">
+                  <div>
+                      <label for="r_division">বিভাগ</label>
+                      <input type="text" id="r_division" list="r_divisionList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
+                      <datalist id="r_divisionList"></datalist>
+                  </div>
+                  <div>
+                      <label for="r_district">জেলা</label>
+                      <input type="text" id="r_district" list="r_districtList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
+                      <datalist id="r_districtList"></datalist>
+                  </div>
+              </div>
 
-              <label for="r_district">জেলা</label>
-              <input type="text" id="r_district" list="r_districtList" placeholder="টাইপ করুন বা সিলেক্ট করুন" disabled required>
-              <datalist id="r_districtList"></datalist>
-
-              <label for="r_subDistrict">উপজেলা / সিটি কর্পোরেশন</label>
-              <input type="text" id="r_subDistrict" list="r_subDistrictList" placeholder="টাইপ করুন বা সিলেক্ট করুন" disabled required>
+              <label for="r_subDistrict" style="margin-top: 8px;">উপজেলা / সিটি কর্পোরেশন</label>
+              <input type="text" id="r_subDistrict" list="r_subDistrictList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
               <datalist id="r_subDistrictList"></datalist>
 
               <div id="r_subLocationContainer"></div>
@@ -508,7 +526,7 @@
             <button type="button" onclick="switchOnlineTab('merchantNotifTab')">নোটিফিকেশন <span id="merchantNotifBadge" class="badge-count" style="display:none;">0</span></button>
         </div>
 
-        <!-- NEW ORDER TAB (FIXED WITH LIST-TO-DETAIL VIEW) -->
+        <!-- NEW ORDER TAB -->
         <div id="orderTab" class="online-dashboard-section" style="padding: 0 10px;">
             <div id="merchantOrderListContainer">
                 <p style="text-align: center; color: #777;">কোনো নতুন কাস্টমার অর্ডার নেই</p>
@@ -1118,11 +1136,12 @@
         if(divEl) {
             divEl.addEventListener("input", (e) => {
                 const div = e.target.value.trim();
+                fetchOrCreateDynamicData('locations', div);
                 if (div) {
                     loadLocationData(`locations/${div}`, distListId, distInputId);
                 } else {
-                    if(distEl) { distEl.value = ''; distEl.disabled = true; }
-                    if(subDistEl) { subDistEl.value = ''; subDistEl.disabled = true; }
+                    if(distEl) { distEl.value = ''; }
+                    if(subDistEl) { subDistEl.value = ''; }
                     if(subContainer) subContainer.innerHTML = '';
                 }
             });
@@ -1132,17 +1151,23 @@
             distEl.addEventListener("input", (e) => {
                 const div = divEl ? divEl.value.trim() : '';
                 const dist = e.target.value.trim();
+                if(div && dist) fetchOrCreateDynamicData(`locations/${div}`, dist);
                 if (div && dist) {
                     loadLocationData(`locations/${div}/${dist}`, subDistListId, subDistInputId);
                 } else {
-                    if(subDistEl) { subDistEl.value = ''; subDistEl.disabled = true; }
+                    if(subDistEl) { subDistEl.value = ''; }
                     if(subContainer) subContainer.innerHTML = '';
                 }
             });
         }
 
         if(subDistEl) {
-            subDistEl.addEventListener("change", function() {
+            subDistEl.addEventListener("input", function() {
+                const div = divEl ? divEl.value.trim() : '';
+                const dist = distEl ? distEl.value.trim() : '';
+                const subDist = this.value.trim();
+                if(div && dist && subDist) fetchOrCreateDynamicData(`locations/${div}/${dist}`, subDist);
+
                 const selectedVal = this.value.toLowerCase();
                 if(subContainer) subContainer.innerHTML = "";
 
@@ -1827,7 +1852,7 @@
         `;
     }
 
-    // MERCHANT INCOMING ORDERS - LIST VIEW (FIXED)
+    // MERCHANT INCOMING ORDERS - LIST VIEW
     function loadMerchantIncomingOrders() {
         const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('merchantOrderListContainer');
@@ -2890,6 +2915,11 @@
     }
 
     async function saveUserToDatabase(newUser, roleFolder, counterName, successMsg) {
+        if (!newUser.username || /\s|\./.test(newUser.username)) {
+            alert('ইউজার আইডিতে কোনো স্পেস, ডট (.) বা বিশেষ চিহ্ন থাকা যাবে না!');
+            return;
+        }
+
         if(window.checkUsernameExistsInFirebase) {
             let exists = await window.checkUsernameExistsInFirebase(newUser.username);
             if(exists) {
