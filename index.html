@@ -172,8 +172,8 @@
         <h2>মার্চেন্ট / দোকানদার রেজিস্ট্রেশন</h2>
         <form id="merchantRegForm">
             <div class="form-group">
-                <label for="mRegUsername">ইউজার আইডি</label>
-                <input type="text" id="mRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" required>
+                <label for="mRegUsername">ইউজার আইডি (শুধু ইংরেজি লেটার ও নম্বর)</label>
+                <input type="text" id="mRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" oninput="validateUsernameInput(this)" required>
             </div>
             
             <div class="form-group">
@@ -304,8 +304,8 @@
         <h2>ক্রেতা / সাধারণ গ্রাহক রেজিস্ট্রেশন</h2>
         <form id="customerRegForm">
             <div class="form-group">
-                <label for="cRegUsername">ইউজার আইডি</label>
-                <input type="text" id="cRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" required>
+                <label for="cRegUsername">ইউজার আইডি (শুধু ইংরেজি লেটার ও নম্বর)</label>
+                <input type="text" id="cRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" oninput="validateUsernameInput(this)" required>
             </div>
             
             <div class="form-group">
@@ -390,8 +390,8 @@
         <h2>ডেলিভারি রাইডার / পার্সেল রেজিস্ট্রেশন</h2>
         <form id="riderRegForm">
             <div class="form-group">
-                <label for="rRegUsername">ইউজার আইডি</label>
-                <input type="text" id="rRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" required>
+                <label for="rRegUsername">ইউজার আইডি (শুধু ইংরেজি লেটার ও নম্বর)</label>
+                <input type="text" id="rRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" oninput="validateUsernameInput(this)" required>
             </div>
             
             <div class="form-group">
@@ -986,6 +986,11 @@
     let activeMerchantShop = null;
     let currentPaymentCallback = null;
 
+    // ইউজারনেম ফিল্ডে স্পেস, ডট, হাইফেন বা অন্য কোনো স্পেশাল ক্যারেক্টার ব্লক করার ফাংশন
+    window.validateUsernameInput = function(inputEl) {
+        inputEl.value = inputEl.value.replace(/[^a-zA-Z0-9]/g, '');
+    };
+
     window.convertImageToBase64 = function(inputEl, storageVarName) {
         if (inputEl.files && inputEl.files[0]) {
             let reader = new FileReader();
@@ -1129,6 +1134,7 @@
       }
     }
 
+    // উপজেলা ও সিটি কর্পোরেশন লজিক সম্বলিত ডাইনামিক লোকেশন সিস্টেম
     function initDatalistLocationSystem(formType, divInputId, divListId, distInputId, distListId, subDistInputId, subDistListId) {
         const divEl = document.getElementById(divInputId);
         const distEl = document.getElementById(distInputId);
@@ -1185,6 +1191,7 @@
                 const selectedVal = this.value.toLowerCase();
                 if(subContainer) subContainer.innerHTML = "";
 
+                // যদি সিটি কর্পোরেশন সিলেক্ট করা হয়, তবে থানা ও ওয়ার্ড আসবে
                 if (selectedVal.includes('সিটি কর্পোরেশন') || selectedVal.includes('city corporation')) {
                     subContainer.innerHTML = `
                       <div style="display: flex; gap: 8px; margin-top: 6px;">
@@ -1203,6 +1210,7 @@
                     loadLocationData('locations/thanas', `${formType}_thanaList`, `${formType}_thana`);
                     loadLocationData('locations/wards', `${formType}_wardList`, `${formType}_ward`);
                 } else if(selectedVal) {
+                    // উপজেলা হলে ইউনিয়ন ও ওয়ার্ড আসবে
                     subContainer.innerHTML = `
                       <div style="display: flex; gap: 8px; margin-top: 6px;">
                         <div style="flex: 1;">
