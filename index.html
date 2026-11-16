@@ -1068,6 +1068,9 @@
     async function fetchOrCreateDynamicData(path, value) {
       if (!value) return;
       try {
+        let cleanVal = String(value).trim();
+        if(!cleanVal) return;
+        
         let data = null;
         if(db) {
             const snap = await get(ref(db, path));
@@ -1075,17 +1078,17 @@
         }
         let exists = false;
         if (data) {
-          Object.values(data).forEach(item => {
-            if (String(item).toLowerCase() === String(value).toLowerCase()) {
+          Object.keys(data).forEach(key => {
+            if (String(key).toLowerCase() === cleanVal.toLowerCase()) {
               exists = true;
             }
           });
         }
         if (!exists) {
           if(db) {
-              await set(ref(db, `${path}/${value}`), { active: true });
+              await set(ref(db, `${path}/${cleanVal}`), { active: true });
           } else {
-              await fetch(`${DB_URL}/${path}/${value}.json`, {
+              await fetch(`${DB_URL}/${path}/${cleanVal}.json`, {
                 method: 'PUT',
                 body: JSON.stringify({ active: true })
               });
@@ -1136,8 +1139,8 @@
         if(divEl) {
             divEl.addEventListener("input", (e) => {
                 const div = e.target.value.trim();
-                fetchOrCreateDynamicData('locations', div);
                 if (div) {
+                    fetchOrCreateDynamicData('locations', div);
                     loadLocationData(`locations/${div}`, distListId, distInputId);
                 } else {
                     if(distEl) { distEl.value = ''; }
@@ -1145,19 +1148,28 @@
                     if(subContainer) subContainer.innerHTML = '';
                 }
             });
+            divEl.addEventListener("change", (e) => {
+                const div = e.target.value.trim();
+                if (div) fetchOrCreateDynamicData('locations', div);
+            });
         }
 
         if(distEl) {
             distEl.addEventListener("input", (e) => {
                 const div = divEl ? divEl.value.trim() : '';
                 const dist = e.target.value.trim();
-                if(div && dist) fetchOrCreateDynamicData(`locations/${div}`, dist);
                 if (div && dist) {
+                    fetchOrCreateDynamicData(`locations/${div}`, dist);
                     loadLocationData(`locations/${div}/${dist}`, subDistListId, subDistInputId);
                 } else {
                     if(subDistEl) { subDistEl.value = ''; }
                     if(subContainer) subContainer.innerHTML = '';
                 }
+            });
+            distEl.addEventListener("change", (e) => {
+                const div = divEl ? divEl.value.trim() : '';
+                const dist = e.target.value.trim();
+                if (div && dist) fetchOrCreateDynamicData(`locations/${div}`, dist);
             });
         }
 
@@ -1166,7 +1178,9 @@
                 const div = divEl ? divEl.value.trim() : '';
                 const dist = distEl ? distEl.value.trim() : '';
                 const subDist = this.value.trim();
-                if(div && dist && subDist) fetchOrCreateDynamicData(`locations/${div}/${dist}`, subDist);
+                if (div && dist && subDist) {
+                    fetchOrCreateDynamicData(`locations/${div}/${dist}`, subDist);
+                }
 
                 const selectedVal = this.value.toLowerCase();
                 if(subContainer) subContainer.innerHTML = "";
@@ -1176,29 +1190,43 @@
                       <div style="display: flex; gap: 8px; margin-top: 6px;">
                         <div style="flex: 1;">
                           <label>থানা (Thana)</label>
-                          <input type="text" id="${formType}_thana" list="${formType}_thanaList" placeholder="থানা লিখুন" onblur="fetchOrCreateDynamicData('locations/thanas', this.value)">
+                          <input type="text" id="${formType}_thana" list="${formType}_thanaList" placeholder="থানা লিখুন" onblur="if(this.value.trim()){ fetchOrCreateDynamicData('locations/thanas', this.value.trim()); }">
                           <datalist id="${formType}_thanaList"></datalist>
                         </div>
                         <div style="flex: 1;">
                           <label>ওয়ার্ড (Ward)</label>
-                          <input type="text" id="${formType}_ward" list="${formType}_wardList" placeholder="ওয়ার্ড লিখুন" onblur="fetchOrCreateDynamicData('locations/wards', this.value)">
+                          <input type="text" id="${formType}_ward" list="${formType}_wardList" placeholder="নাম (নম্বর)" onblur="if(this.value.trim()){ fetchOrCreateDynamicData('locations/wards', this.value.trim()); }">
                           <datalist id="${formType}_wardList"></datalist>
                         </div>
                       </div>
                     `;
+                    loadLocationData('locations/thanas', `${formType}_thanaList`, `${formType}_thana`);
+                    loadLocationData('locations/wards', `${formType}_wardList`, `${formType}_ward`);
                 } else if(selectedVal) {
                     subContainer.innerHTML = `
-                      <div style="margin-top: 6px;">
-                        <label>ইউনিয়ন (Union)</label>
-                        <input type="text" id="${formType}_union" list="${formType}_unionList" placeholder="ইউনিয়ন লিখুন" onblur="fetchOrCreateDynamicData('locations/unions', this.value)">
-                        <datalist id="${formType}_unionList"></datalist>
-                      </div>
-                      <div style="margin-top: 6px;">
-                        <label>ওয়ার্ড (Ward)</label>
-                        <input type="text" id="${formType}_ward_upazila" list="${formType}_wardList" placeholder="ওয়ার্ড লিখুন" onblur="fetchOrCreateDynamicData('locations/wards', this.value)">
-                        <datalist id="${formType}_wardList"></datalist>
+                      <div style="display: flex; gap: 8px; margin-top: 6px;">
+                        <div style="flex: 1;">
+                          <label>ইউনিয়ন (Union)</label>
+                          <input type="text" id="${formType}_union" list="${formType}_unionList" placeholder="ইউনিয়ন লিখুন" onblur="if(this.value.trim()){ fetchOrCreateDynamicData('locations/unions', this.value.trim()); }">
+                          <datalist id="${formType}_unionList"></datalist>
+                        </div>
+                        <div style="flex: 1;">
+                          <label>ওয়ার্ড (Ward)</label>
+                          <input type="text" id="${formType}_ward_upazila" list="${formType}_wardList" placeholder="নাম (নম্বর)" onblur="if(this.value.trim()){ fetchOrCreateDynamicData('locations/wards', this.value.trim()); }">
+                          <datalist id="${formType}_wardList"></datalist>
+                        </div>
                       </div>
                     `;
+                    loadLocationData('locations/unions', `${formType}_unionList`, `${formType}_union`);
+                    loadLocationData('locations/wards', `${formType}_wardList`, `${formType}_ward_upazila`);
+                }
+            });
+            subDistEl.addEventListener("change", function() {
+                const div = divEl ? divEl.value.trim() : '';
+                const dist = distEl ? distEl.value.trim() : '';
+                const subDist = this.value.trim();
+                if (div && dist && subDist) {
+                    fetchOrCreateDynamicData(`locations/${div}/${dist}`, subDist);
                 }
             });
         }
@@ -2915,8 +2943,8 @@
     }
 
     async function saveUserToDatabase(newUser, roleFolder, counterName, successMsg) {
-        if (!newUser.username || /\s|\./.test(newUser.username)) {
-            alert('ইউজার আইডিতে কোনো স্পেস, ডট (.) বা বিশেষ চিহ্ন থাকা যাবে না!');
+        if (!newUser.username || /[\s.\-]/.test(newUser.username)) {
+            alert('ইউজার আইডিতে কোনো স্পেস, ডট (.) বা হাইফেন (-) ব্যবহার করা যাবে না!');
             return;
         }
 
