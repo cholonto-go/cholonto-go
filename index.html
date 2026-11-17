@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cholonto Go - Portal</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; box-sizing: border-box; width: 100%; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; box-sizing: border-box; width: 100%; overflow-x: hidden; }
         
         /* মোবাইলে ফুল স্ক্রিন / ফুল উইথ এবং ডেস্কটপে মার্জিত কার্ড সেটআপ */
-        .container { width: 100%; max-width: 580px; background: #ffffff; padding: 15px 12px; border-radius: 0; box-shadow: none; box-sizing: border-box; margin-bottom: 0; min-height: 100vh; }
+        .container { width: 100%; max-width: 580px; background: #ffffff; padding: 15px 12px; border-radius: 0; box-shadow: none; box-sizing: border-box; margin-bottom: 0; min-height: 100vh; overflow-x: hidden; }
         @media (min-width: 768px) {
             .container { padding: 25px 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin: 20px auto; min-height: auto; }
             body { padding: 20px; }
@@ -20,11 +20,11 @@
         .payment-group { margin-bottom: 16px; }
         .payment-group > label { display: block; margin-bottom: 6px; font-weight: 600; color: #444; font-size: 13.5px; }
         
-        .address-group { margin-bottom: 16px; background: #fafbfc; padding: 14px; border: 1px solid #e1e4e8; border-radius: 6px; }
+        .address-group { margin-bottom: 16px; background: #fafbfc; padding: 14px; border: 1px solid #e1e4e8; border-radius: 6px; overflow-x: auto; }
         .address-group input, .address-group select { width: 100%; padding: 11px 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; background: #fff; margin-bottom: 8px; }
         
-        .row-fields { display: flex; gap: 12px; }
-        .row-fields > div { flex: 1; }
+        .row-fields { display: flex; gap: 12px; flex-wrap: wrap; }
+        .row-fields > div { flex: 1; min-width: 130px; }
         
         label { display: block; margin-bottom: 6px; font-weight: 600; color: #444; font-size: 13.5px; }
         
@@ -47,32 +47,37 @@
         
         .page { display: none; width: 100%; box-sizing: border-box; }
         .active-page { display: block; }
-        .card { background: #ffffff; border: 1px solid #e1e4e8; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; width: 100%; }
+        .card { background: #ffffff; border: 1px solid #e1e4e8; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; width: 100%; overflow-x: auto; }
         
-        .memo-box { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 6px; margin-bottom: 15px; position: relative; width: 100%; box-sizing: border-box; }
+        .memo-box { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 6px; margin-bottom: 15px; position: relative; width: 100%; box-sizing: border-box; overflow-x: auto; }
         
-        .invoice-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; position: relative; }
+        .invoice-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; position: relative; flex-wrap: wrap; gap: 5px; }
         .invoice-no-box { display: inline-block; background: #e2f0d9; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
-        .shop-name-container { position: absolute; left: 50%; transform: translateX(-50%); text-align: center; }
+        .shop-name-container { text-align: center; width: 100%; margin-top: 5px; }
+        @media (min-width: 480px) {
+            .shop-name-container { position: absolute; left: 50%; transform: translateX(-50%); width: auto; margin-top: 0; }
+        }
         .shop-name { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 2px; }
         .shop-underline { width: 100%; height: 2px; background: #28a745; margin: 0 auto; }
 
-        .invoice-grid { display: flex; gap: 15px; margin-top: 15px; margin-bottom: 10px; }
-        .invoice-grid-col { flex: 1; padding: 8px; font-size: 12px; line-height: 1.4; background: #f9f9f9; border-radius: 4px; }
+        .invoice-grid { display: flex; gap: 15px; margin-top: 15px; margin-bottom: 10px; flex-wrap: wrap; }
+        .invoice-grid-col { flex: 1; min-width: 200px; padding: 8px; font-size: 12px; line-height: 1.4; background: #f9f9f9; border-radius: 4px; box-sizing: border-box; }
 
-        .order-date-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: #555; margin-bottom: 8px; }
+        .order-date-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: #555; margin-bottom: 8px; flex-wrap: wrap; gap: 5px; }
         .payment-middle-display { text-align: center; font-size: 12px; font-weight: bold; color: #333; margin: 8px 0; background: #f1f1f1; padding: 5px; border-radius: 4px; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12.5px; }
+        /* টেবিল ওভারফ্লো ফিক্স করার জন্য স্টাইল */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 8px; }
+        table { width: 100%; border-collapse: collapse; min-width: 320px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12.5px; word-break: break-word; }
         th { background-color: #28a745; color: white; }
         .input-box { width: 100%; padding: 6px !important; text-align: center; border: 1px solid #bbb; border-radius: 4px; box-sizing: border-box; font-size: 12.5px; }
         
         .table-total-row { background: #fff9e6; font-weight: bold; text-align: right; }
         .table-total-row td { text-align: right !important; padding-right: 12px; }
 
-        .sub-nav-tabs { display: flex; gap: 6px; margin-bottom: 15px; background: #e9ecef; padding: 6px; border-radius: 6px; flex-wrap: wrap; width: 100%; box-sizing: border-box; }
-        .sub-nav-tabs button { margin-top: 0; width: auto; padding: 7px 10px; font-size: 12px; background: #6c757d; border: none; color: white; border-radius: 4px; cursor: pointer; flex: 1; position: relative; }
+        .sub-nav-tabs { display: flex; gap: 6px; margin-bottom: 15px; background: #e9ecef; padding: 6px; border-radius: 6px; flex-wrap: wrap; width: 100%; box-sizing: border-box; overflow-x: auto; }
+        .sub-nav-tabs button { margin-top: 0; width: auto; padding: 7px 10px; font-size: 12px; background: #6c757d; border: none; color: white; border-radius: 4px; cursor: pointer; flex: 1; min-width: 100px; position: relative; }
         .sub-nav-tabs button:hover { background: #5a6268; }
 
         .badge-count { background: #dc3545; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; position: absolute; top: -6px; right: -6px; font-weight: bold; display: inline-block; }
@@ -92,11 +97,11 @@
         .dash-compact-corner-btn { background-color: #343a40; color: #ffc107; border: none; padding: 6px 14px; font-size: 12px; font-weight: bold; border-radius: 4px; display: inline-block; cursor: pointer; text-align: left; margin-bottom: 8px; width: auto; min-width: 75px; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
         .dash-compact-corner-btn:hover { background-color: #23272b; }
 
-        #paymentModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; }
-        .payment-modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 90%; max-width: 380px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        #paymentModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; box-sizing: border-box; padding: 10px; }
+        .payment-modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 100%; max-width: 380px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); box-sizing: border-box; }
 
-        #customModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
-        .modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        #customModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; box-sizing: border-box; padding: 10px; }
+        .modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); box-sizing: border-box; }
         .modal-buttons { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
 
         @media print {
@@ -189,13 +194,13 @@
         <form id="merchantRegForm">
             <div class="form-group">
                 <label for="mRegUsername">ইউজার আইডি (শুধু ইংরেজি লেটার ও নম্বর)</label>
-                <input type="text" id="mRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" oninput="validateUsernameInput(this)" required>
+                <input type="text" id="mRegUsername" placeholder="ইংরেজি লেটার ও নম্বর" oninput="validateStrictEnglishInput(this)" required>
             </div>
             
             <div class="form-group">
               <label for="mRegPassword">পাসওয়ার্ড</label>
               <div style="position: relative;">
-                <input type="password" id="mRegPassword" placeholder="পাসওয়ার্ড লিখুন" required style="padding-right: 45px;" />
+                <input type="password" id="mRegPassword" placeholder="ইংরেজি লেটার ও নম্বর" oninput="validateStrictEnglishInput(this)" required style="padding-right: 45px;" />
                 <button type="button" onclick="togglePassword('mRegPassword', 'mRegEyeIcon')" style="position: absolute; right: 0; top: 0; background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; width: 45px; height: 100%; margin: 0;">
                   <svg id="mRegEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -262,7 +267,7 @@
                 <input type="text" id="mTradeLicense" required placeholder="ট্রেড লাইসেন্স নাম্বার">
             </div>
 
-            <!-- অ্যাড্রেস সেকশন (স্মার্ট অটো-ডিটেক্ট সিটি কর্পোরেশন ও উপজেলা) -->
+            <!-- অ্যাড্রেস সেকশন -->
             <div class="address-group">
               <div class="row-fields">
                   <div>
@@ -325,13 +330,13 @@
         <form id="customerRegForm">
             <div class="form-group">
                 <label for="cRegUsername">ইউজার আইডি (শুধু ইংরেজি লেটার ও নম্বর)</label>
-                <input type="text" id="cRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" oninput="validateUsernameInput(this)" required>
+                <input type="text" id="cRegUsername" placeholder="ইংরেজি লেটার ও নম্বর" oninput="validateStrictEnglishInput(this)" required>
             </div>
             
             <div class="form-group">
               <label for="cRegPassword">পাসওয়ার্ড</label>
               <div style="position: relative;">
-                <input type="password" id="cRegPassword" placeholder="পাসওয়ার্ড লিখুন" required style="padding-right: 45px;" />
+                <input type="password" id="cRegPassword" placeholder="ইংরেজি লেটার ও নম্বর" oninput="validateStrictEnglishInput(this)" required style="padding-right: 45px;" />
                 <button type="button" onclick="togglePassword('cRegPassword', 'cRegEyeIcon')" style="position: absolute; right: 0; top: 0; background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; width: 45px; height: 100%; margin: 0;">
                   <svg id="cRegEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -414,13 +419,13 @@
         <form id="riderRegForm">
             <div class="form-group">
                 <label for="rRegUsername">ইউজার আইডি (শুধু ইংরেজি লেটার ও নম্বর)</label>
-                <input type="text" id="rRegUsername" placeholder="ইউজার আইডি লিখুন (স্পেস বা ডট ছাড়া)" oninput="validateUsernameInput(this)" required>
+                <input type="text" id="rRegUsername" placeholder="ইংরেজি লেটার ও নম্বর" oninput="validateStrictEnglishInput(this)" required>
             </div>
             
             <div class="form-group">
               <label for="rRegPassword">পাসওয়ার্ড</label>
               <div style="position: relative;">
-                <input type="password" id="rRegPassword" placeholder="পাসওয়ার্ড লিখুন" required style="padding-right: 45px;" />
+                <input type="password" id="rRegPassword" placeholder="ইংরেজি লেটার ও নম্বর" oninput="validateStrictEnglishInput(this)" required style="padding-right: 45px;" />
                 <button type="button" onclick="togglePassword('rRegPassword', 'rRegEyeIcon')" style="position: absolute; right: 0; top: 0; background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; width: 45px; height: 100%; margin: 0;">
                   <svg id="rRegEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -504,13 +509,13 @@
         <form id="loginForm">
             <div class="form-group">
                 <label for="customerUserId">ইউজার আইডি</label>
-                <input type="text" id="customerUserId" name="userId" placeholder="ইউজার আইডি লিখুন" required />
+                <input type="text" id="customerUserId" name="userId" placeholder="ইংরেজি লেটার ও নম্বর" oninput="validateStrictEnglishInput(this)" required />
             </div>
 
             <div class="form-group">
               <label for="customerPassword">পাসওয়ার্ড</label>
               <div style="position: relative;">
-                <input type="password" id="customerPassword" name="password" placeholder="পাসওয়ার্ড লিখুন" required style="padding-right: 45px;" />
+                <input type="password" id="customerPassword" name="password" placeholder="ইংরেজি লেটার ও নম্বর" oninput="validateStrictEnglishInput(this)" required style="padding-right: 45px;" />
                 <button type="button" onclick="togglePassword('customerPassword', 'loginEyeIcon')" style="position: absolute; right: 0; top: 0; background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; width: 45px; height: 100%; margin: 0;">
                   <svg id="loginEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -664,22 +669,24 @@
                         <p style="margin:0;">দোকানের তথ্য...</p>
                     </div>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 45%;">পণ্যের নাম</th>
-                                <th style="width: 45%;">পরিমাণ ও একক</th>
-                                <th style="width: 10%;">কাটুন</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerOrderInputBody">
-                            <tr>
-                                <td><input type="text" class="input-box cust-item-name" placeholder="পণ্যের নাম"></td>
-                                <td><input type="text" class="input-box cust-item-qty" placeholder="পরিমাণ ও একক"></td>
-                                <td><button type="button" onclick="this.parentElement.parentElement.remove()" style="background: #dc3545; color: white; border: none; padding: 5px 8px; cursor: pointer; border-radius: 4px; margin: 0; width: auto; font-size: 12px;">×</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 45%;">পণ্যের নাম</th>
+                                    <th style="width: 45%;">পরিমাণ ও একক</th>
+                                    <th style="width: 10%;">কাটুন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customerOrderInputBody">
+                                <tr>
+                                    <td><input type="text" class="input-box cust-item-name" placeholder="পণ্যের নাম"></td>
+                                    <td><input type="text" class="input-box cust-item-qty" placeholder="পরিমাণ ও একক"></td>
+                                    <td><button type="button" onclick="this.parentElement.parentElement.remove()" style="background: #dc3545; color: white; border: none; padding: 5px 8px; cursor: pointer; border-radius: 4px; margin: 0; width: auto; font-size: 12px;">×</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <button type="button" onclick="addCustomerItemRow()" style="background-color: #6c757d; margin-top: 10px; width: auto; padding: 6px 14px; font-size: 12.5px;">+ Add</button>
 
                     <div class="payment-box" style="margin-top: 15px;">
@@ -1026,7 +1033,8 @@
         return String(str).trim().replace(/[.#$[\]/]/g, "-");
     }
 
-    window.validateUsernameInput = function(inputEl) {
+    // শুধুমাত্র ইংরেজি লেটার এবং নম্বর নেওয়ার ফাংশন (বাংলা সম্পূর্ণ নিষিদ্ধ)
+    window.validateStrictEnglishInput = function(inputEl) {
         inputEl.value = inputEl.value.replace(/[^a-zA-Z0-9]/g, '');
     };
 
@@ -1198,7 +1206,7 @@
       }
     }
 
-    // স্মার্ট লোকেশন সিস্টেম (সম্পূর্ণ "city corporation" বা "সিটি কর্পোরেশন" শব্দগুচ্ছ চেক করবে)
+    // স্মার্ট লোকেশন সিস্টেম (স্পেসিফিক "city corporation" বা "সিটি কর্পোরেশন" চেক করবে)
     function initSmartLocationSystem(formType, divInputId, divListId, distInputId, distListId, subDistInputId, subDistListId) {
         const divEl = document.getElementById(divInputId);
         const distEl = document.getElementById(distInputId);
@@ -1430,7 +1438,6 @@
 
     async function checkIsCityOrUpazila(div, dist, subVal, callback) {
         let lower = subVal.toLowerCase();
-        // সুনির্দিষ্টভাবে 'city corporation' বা 'সিটি কর্পোরেশন' শব্দগুচ্ছ থাকলেই কেবল সিটি কর্পোরেশন হিসেবে ধরবে
         if(lower.includes('city corporation') || lower.includes('সিটি কর্পোরেশন') || lower.includes('citycorporation')) {
             callback(true);
             return;
@@ -1760,7 +1767,7 @@
             return;
         }
 
-        let html = '<table style="margin-top:6px;"><thead><tr><th>দোকানের নাম</th><th>ক্যাটাগরি</th><th>মালিক</th><th>ঠিকানা</th><th>সিলেক্ট</th></tr></thead><tbody>';
+        let html = '<div class="table-responsive"><table style="margin-top:6px;"><thead><tr><th>দোকানের নাম</th><th>ক্যাটাগরি</th><th>মালিক</th><th>ঠিকানা</th><th>সিলেক্ট</th></tr></thead><tbody>';
         merchants.forEach(m => {
             html += `
                 <tr>
@@ -1772,7 +1779,7 @@
                 </tr>
             `;
         });
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         container.innerHTML = html;
     }
 
@@ -2084,13 +2091,15 @@
         `;
 
         return `
-            <table>
-                <thead><tr><th>পণ্যের নাম</th><th>পরিমাণ</th><th>${isInputTable ? 'প্রতি দর' : 'দর'}</th><th>${isInputTable ? 'মোট দর' : 'মোট'}</th></tr></thead>
-                <tbody>
-                    ${itemRows}
-                    ${totalRowHtml}
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead><tr><th>পণ্যের নাম</th><th>পরিমাণ</th><th>${isInputTable ? 'প্রতি দর' : 'দর'}</th><th>${isInputTable ? 'মোট দর' : 'মোট'}</th></tr></thead>
+                    <tbody>
+                        ${itemRows}
+                        ${totalRowHtml}
+                    </tbody>
+                </table>
+            </div>
         `;
     }
 
@@ -2111,7 +2120,7 @@
             return;
         }
 
-        let html = '<h4 style="margin-bottom:6px; font-size: 14px;">ক্রেতাদের প্রাপ্ত অর্ডারের তালিকা:</h4><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>অর্ডার আইডি</th><th>কাস্টমার নাম</th><th>তারিখ</th><th>অ্যাকশন</th></tr></thead><tbody>';
+        let html = '<h4 style="margin-bottom:6px; font-size: 14px;">ক্রেতাদের প্রাপ্ত অর্ডারের তালিকা:</h4><div class="table-responsive"><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>অর্ডার আইডি</th><th>কাস্টমার নাম</th><th>তারিখ</th><th>অ্যাকশন</th></tr></thead><tbody>';
         myOrders.forEach((ord) => {
             html += `
                 <tr>
@@ -2123,7 +2132,7 @@
                 </tr>
             `;
         });
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         container.innerHTML = html;
     }
 
@@ -2145,8 +2154,8 @@
             <div class="memo-box" id="merchant-order-card-${ordIdx}" style="margin-top:6px;">
                 ${renderInvoiceHeader(ord)}
                 ${renderInvoiceTableWithEmbeddedTotal(ord, true)}
-                <div style="display: flex; gap: 8px; margin-top: 10px;">
-                    <button type="button" onclick="sendPriceToCustomer('${ord.orderId}', ${ordIdx})" style="background-color: #007bff; margin-top: 0; flex: 1; padding: 10px;">মূল্য কোটেশন কাস্টমারকে পাঠান</button>
+                <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                    <button type="button" onclick="sendPriceToCustomer('${ord.orderId}', ${ordIdx})" style="background-color: #007bff; margin-top: 0; flex: 1; padding: 10px; min-width: 150px;">মূল্য কোটেশন কাস্টমারকে পাঠান</button>
                     <button type="button" onclick="cancelMerchantOrder('${ord.orderId}')" class="btn-danger" style="margin-top: 0;">বাতিল</button>
                 </div>
             </div>
@@ -2280,8 +2289,8 @@
                     <div style="font-size: 12.5px; margin-top: 6px; text-align: right; font-weight: bold; color: #333;">
                         ডেলিভারি চার্জ: ${deliveryFee} টাকা
                     </div>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button type="button" onclick="initiateOrderConfirmation('${ord.orderId}')" style="background-color: #28a745; margin-top: 0; flex: 1; padding: 10px;">পেমেন্ট সম্পন্ন ও অর্ডার নিশ্চিত করুন</button>
+                    <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                        <button type="button" onclick="initiateOrderConfirmation('${ord.orderId}')" style="background-color: #28a745; margin-top: 0; flex: 1; padding: 10px; min-width: 150px;">পেমেন্ট সম্পন্ন ও অর্ডার নিশ্চিত করুন</button>
                         <button type="button" onclick="customerCancelOrder('${ord.orderId}')" class="btn-danger" style="margin-top: 0;">বাতিল</button>
                     </div>
                 </div>
@@ -2541,7 +2550,7 @@
             if(myArchives.length === 0) {
                 folderContainer.innerHTML = '<p style="text-align: center; color: #777;">কোনো ইনভয়েস জমা নেই</p>';
             } else {
-                let html = '<h4 style="margin-bottom:6px; font-size: 14px;">ইনভয়েস লিস্ট:</h4><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>দোকান</th><th>সর্বমোট</th><th>অ্যাকশন</th></tr></thead><tbody>';
+                let html = '<h4 style="margin-bottom:6px; font-size: 14px;">ইনভয়েস লিস্ট:</h4><div class="table-responsive"><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>দোকান</th><th>সর্বমোট</th><th>অ্যাকশন</th></tr></thead><tbody>';
                 myArchives.forEach(latest => {
                     html += `
                         <tr>
@@ -2553,7 +2562,7 @@
                         </tr>
                     `;
                 });
-                html += '</tbody></table>';
+                html += '</tbody></table></div>';
                 folderContainer.innerHTML = html;
             }
         }
@@ -2574,7 +2583,7 @@
                 ${renderInvoiceTableWithEmbeddedTotal(ord, false)}
                 ${renderPaymentHistoryHtml(ord)}
             </div>
-            <div class="print-hide" style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 13.5px; font-weight: bold;">
+            <div class="print-hide" style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 13.5px; font-weight: bold; flex-wrap: wrap; gap: 10px;">
                 <span style="color: #007bff; cursor: pointer;" onclick="window.print()">প্রিন্ট</span>
                 <span id="downloadStatusSpan" style="color: #28a745; cursor: pointer;" onclick="downloadCustomerPdf('${ord.orderId}')">পিডিএফ / ডাউনলোড</span>
             </div>
@@ -2744,7 +2753,7 @@
             clientGroups[inv.customerUsername].totalBusiness += (parseFloat(inv.grandTotal) || 0);
         });
 
-        let html = '<table style="margin-top:6px;"><thead><tr><th>কাস্টমার ID</th><th>নাম</th><th>মোবাইল</th><th>মোট লেনদেন</th><th>ইনভয়েস</th><th>অ্যাকশন</th></tr></thead><tbody>';
+        let html = '<div class="table-responsive"><table style="margin-top:6px;"><thead><tr><th>কাস্টমার ID</th><th>নাম</th><th>মোবাইল</th><th>মোট লেনদেন</th><th>ইনভয়েস</th><th>অ্যাকশন</th></tr></thead><tbody>';
         for(let key in clientGroups) {
             let c = clientGroups[key];
             html += `
@@ -2758,7 +2767,7 @@
                 </tr>
             `;
         }
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         container.innerHTML = html;
     }
 
@@ -2771,7 +2780,7 @@
         let archives = JSON.parse(localStorage.getItem('cg_merchant_archives') || '[]');
         let clientInvs = archives.filter(o => o.targetMerchantUsername === activeUser.username && o.customerUsername === custUsername);
 
-        let html = '<h4 style="margin-bottom:6px; font-size: 14px;">ইনভয়েস লিস্ট:</h4><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>সর্বমোট</th><th>অ্যাকশন</th></tr></thead><tbody>';
+        let html = '<h4 style="margin-bottom:6px; font-size: 14px;">ইনভয়েস লিস্ট:</h4><div class="table-responsive"><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>সর্বমোট</th><th>অ্যাকশন</th></tr></thead><tbody>';
         clientInvs.forEach(ord => {
             html += `
                 <tr>
@@ -2782,7 +2791,7 @@
                 </tr>
             `;
         });
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         container.innerHTML = html;
     }
 
@@ -2801,7 +2810,7 @@
                 ${renderInvoiceTableWithEmbeddedTotal(ord, false)}
                 ${renderPaymentHistoryHtml(ord)}
             </div>
-            <div class="print-hide" style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 13.5px; font-weight: bold;">
+            <div class="print-hide" style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 13.5px; font-weight: bold; flex-wrap: wrap; gap: 10px;">
                 <span style="color: #007bff; cursor: pointer;" onclick="window.print()">প্রিন্ট</span>
                 <span style="color: #28a745; cursor: pointer;" onclick="window.print()">পিডিএফ ডাউনলোড</span>
             </div>
@@ -2853,7 +2862,7 @@
             clientGroups[custKey].totalAmount += (parseFloat(inv.grandTotal) || 0);
         });
 
-        let html = '<h4 style="margin-bottom:6px; font-size: 14px;">গ্রাহকভিত্তিক ফোল্ডার:</h4><table style="margin-top:4px;"><thead><tr><th>কাস্টমার ID</th><th>নাম</th><th>মোবাইল</th><th>মোট টাকা</th><th>ইনভয়েস</th><th>অ্যাকশন</th></tr></thead><tbody>';
+        let html = '<h4 style="margin-bottom:6px; font-size: 14px;">গ্রাহকভিত্তিক ফোল্ডার:</h4><div class="table-responsive"><table style="margin-top:4px;"><thead><tr><th>কাস্টমার ID</th><th>নাম</th><th>মোবাইল</th><th>মোট টাকা</th><th>ইনভয়েস</th><th>অ্যাকশন</th></tr></thead><tbody>';
         for(let key in clientGroups) {
             let c = clientGroups[key];
             html += `
@@ -2867,7 +2876,7 @@
                 </tr>
             `;
         }
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         container.innerHTML = html;
     }
 
@@ -2883,7 +2892,7 @@
         let html = `
             <button type="button" class="dash-compact-corner-btn" onclick="loadRiderWallet()">← Back</button>
             <h4 style="margin:6px 0; font-size: 14px;">ইনভয়েস লিস্ট:</h4>
-            <table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>সর্বমোট</th><th>অ্যাকশন</th></tr></thead><tbody>
+            <div class="table-responsive"><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>সর্বমোট</th><th>অ্যাকশন</th></tr></thead><tbody>
         `;
         clientInvs.forEach(ord => {
             html += `
@@ -2895,7 +2904,7 @@
                 </tr>
             `;
         });
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         detailView.innerHTML = html;
     }
 
@@ -2950,7 +2959,7 @@
             customerMap[inv.customerUsername].invoicesCount += 1;
         });
 
-        let html = '<table style="margin-top:6px;"><thead><tr><th>কাস্টমার ID</th><th>নাম</th><th>মোবাইল</th><th>মোট বকেয়া</th><th>ইনভয়েস</th><th>অ্যাকশন</th></tr></thead><tbody>';
+        let html = '<div class="table-responsive"><table style="margin-top:6px;"><thead><tr><th>কাস্টমার ID</th><th>নাম</th><th>মোবাইল</th><th>মোট বকেয়া</th><th>ইনভয়েস</th><th>অ্যাকশন</th></tr></thead><tbody>';
         for(let custKey in customerMap) {
             let c = customerMap[custKey];
             html += `
@@ -2964,7 +2973,7 @@
                 </tr>
             `;
         }
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         container.innerHTML = html;
     }
 
@@ -2977,7 +2986,7 @@
         let dueList = JSON.parse(localStorage.getItem('cg_due_invoices') || '[]');
         let myDues = dueList.filter(o => o.targetMerchantUsername === activeUser.username && o.customerUsername === custUsername && o.remainingDue > 0);
 
-        let html = `<h4 style="margin-bottom:6px; font-size: 14px;">বকেয়া ইনভয়েস লিস্ট:</h4><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>সর্বমোট বকেয়া</th><th>অ্যাকশন</th></tr></thead><tbody>`;
+        let html = `<h4 style="margin-bottom:6px; font-size: 14px;">বকেয়া ইনভয়েস লিস্ট:</h4><div class="table-responsive"><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>সর্বমোট বকেয়া</th><th>অ্যাকশন</th></tr></thead><tbody>`;
         myDues.forEach(inv => {
             html += `
                 <tr>
@@ -2988,7 +2997,7 @@
                 </tr>
             `;
         });
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         detailView.innerHTML = `<button type="button" class="dash-compact-corner-btn" onclick="backToMerchantDueList()">← Back</button>` + html;
     }
 
@@ -3003,8 +3012,8 @@
             <div class="card" style="background:#fff; margin-bottom:10px; margin-top:8px;">
                 <h4 style="margin:0 0 6px 0;">বকেয়া পরিশোধ বা জমা গ্রহণ:</h4>
                 <div class="form-group" style="margin-top:6px;">
-                    <div style="display:flex; gap:10px;">
-                        <input type="number" id="merchantReceiveAmountInput-${inv.orderId}" class="input-box" placeholder="টাকার পরিমাণ" style="background:#fff;">
+                    <div style="display:flex; gap:10px; flex-wrap: wrap;">
+                        <input type="number" id="merchantReceiveAmountInput-${inv.orderId}" class="input-box" placeholder="টাকার পরিমাণ" style="background:#fff; flex: 1; min-width: 120px;">
                         <button type="button" onclick="submitSingleDueReceive('${inv.orderId}', '${custUsername}')" class="btn-blue" style="margin:0; width:130px; padding:8px;">জমা গ্রহণ</button>
                     </div>
                 </div>
@@ -3094,7 +3103,7 @@
             merchantGroups[mKey].totalDue += inv.remainingDue;
         });
 
-        let html = '<h4 style="margin-bottom:6px; font-size: 14px;">দোকানভিত্তিক বকেয়া ফোল্ডার:</h4><table style="margin-top:4px;"><thead><tr><th>প্রতিষ্ঠানের নাম</th><th>মোট বকেয়া</th><th>ইনভয়েস</th><th>অ্যাকশন</th></tr></thead><tbody>';
+        let html = '<h4 style="margin-bottom:6px; font-size: 14px;">দোকানভিত্তিক বকেয়া ফোল্ডার:</h4><div class="table-responsive"><table style="margin-top:4px;"><thead><tr><th>প্রতিষ্ঠানের নাম</th><th>মোট বকেয়া</th><th>ইনভয়েস</th><th>অ্যাকশন</th></tr></thead><tbody>';
         for(let key in merchantGroups) {
             let g = merchantGroups[key];
             html += `
@@ -3106,7 +3115,7 @@
                 </tr>
             `;
         }
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         container.innerHTML = html;
     }
 
@@ -3122,7 +3131,7 @@
         let html = `
             <button type="button" class="dash-compact-corner-btn" onclick="loadCustomerDueData()">← Back</button>
             <h4 style="margin:6px 0; font-size: 14px;">বকেয়া ইনভয়েস লিস্ট:</h4>
-            <table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>বকেয়া টাকা</th><th>অ্যাকশন</th></tr></thead><tbody>
+            <div class="table-responsive"><table style="margin-top:4px;"><thead><tr><th>ইনভয়েস নং</th><th>তারিখ</th><th>বকেয়া টাকা</th><th>অ্যাকশন</th></tr></thead><tbody>
         `;
         merchantDues.forEach(inv => {
             html += `
@@ -3134,7 +3143,7 @@
                 </tr>
             `;
         });
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         detailView.innerHTML = html;
     }
 
