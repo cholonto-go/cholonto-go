@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cholonto Go - Portal</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; box-sizing: border-box; width: 100%; }
         
-        /* ডেস্কটপ ও মোবাইলের জন্য মার্জিত সেন্টার্ড কার্ড কন্টেইনার */
-        .container { width: 100%; max-width: 580px; background: #ffffff; padding: 25px 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); box-sizing: border-box; margin-bottom: 30px; }
+        /* মোবাইলে ফুল স্ক্রিন / ফুল উইথ এবং ডেস্কটপে মার্জিত কার্ড সেটআপ */
+        .container { width: 100%; max-width: 580px; background: #ffffff; padding: 15px 12px; border-radius: 0; box-shadow: none; box-sizing: border-box; margin-bottom: 0; min-height: 100vh; }
+        @media (min-width: 768px) {
+            .container { padding: 25px 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin: 20px auto; min-height: auto; }
+            body { padding: 20px; }
+        }
         
         h2, h3 { text-align: center; color: #333; margin-top: 0; margin-bottom: 20px; font-weight: 600; }
         
@@ -258,7 +262,7 @@
                 <input type="text" id="mTradeLicense" required placeholder="ট্রেড লাইসেন্স নাম্বার">
             </div>
 
-            <!-- নতুন সাজানো অ্যাড্রেস সেকশন (রেডিও বাটন মুক্ত, স্মুথ টাইপিং ও লিস্ট সিলেকশন) -->
+            <!-- অ্যাড্রেস সেকশন (স্মার্ট অটো-ডিটেক্ট সিটি কর্পোরেশন ও উপজেলা) -->
             <div class="address-group">
               <div class="row-fields">
                   <div>
@@ -1123,7 +1127,6 @@
       }
     }
 
-    // নিখুঁত হায়ারার্কিক্যাল লোকেশন সিংক (বিভাগ -> জেলা -> উপজেলা/সিটি -> ইউনিয়ন/থানা/ওয়ার্ড)
     async function syncFullLocationHierarchy(locObj) {
         const div = cleanFirebaseKey(locObj.division);
         const dist = cleanFirebaseKey(locObj.district);
@@ -1195,7 +1198,7 @@
       }
     }
 
-    // স্মার্ট লোকেশন ডাটালিষ্ট সিস্টেম (কার্সার রাখলেই বা টাইপ করলেই লিস্ট আসবে, নতুন হলে টাইপ করলে সেভ হবে)
+    // স্মার্ট লোকেশন সিস্টেম (সম্পূর্ণ "city corporation" বা "সিটি কর্পোরেশন" শব্দগুচ্ছ চেক করবে)
     function initSmartLocationSystem(formType, divInputId, divListId, distInputId, distListId, subDistInputId, subDistListId) {
         const divEl = document.getElementById(divInputId);
         const distEl = document.getElementById(distInputId);
@@ -1203,16 +1206,11 @@
         const subContainerId = formType === 'merchant' ? 'subLocationContainer' : `${formType}_subLocationContainer`;
         const subContainer = document.getElementById(subContainerId);
 
-        // বিভাগ ফোকাস বা ইনপুট
         if(divEl) {
-            divEl.addEventListener("focus", () => {
-                loadLocationData("locations", divListId, divInputId);
-            });
+            divEl.addEventListener("focus", () => loadLocationData("locations", divListId, divInputId));
             divEl.addEventListener("input", (e) => {
                 const div = cleanFirebaseKey(e.target.value);
-                if (div) {
-                    loadLocationData(`locations/${div}/districts`, distListId, distInputId);
-                }
+                if (div) loadLocationData(`locations/${div}/districts`, distListId, distInputId);
             });
             divEl.addEventListener("change", (e) => {
                 const div = cleanFirebaseKey(e.target.value);
@@ -1223,21 +1221,15 @@
             });
         }
 
-        // জেলা ফোকাস বা ইনপুট
         if(distEl) {
             distEl.addEventListener("focus", () => {
                 const div = cleanFirebaseKey(divEl ? divEl.value : '');
-                if(div) {
-                    loadLocationData(`locations/${div}/districts`, distListId, distInputId);
-                }
+                if(div) loadLocationData(`locations/${div}/districts`, distListId, distInputId);
             });
             distEl.addEventListener("input", (e) => {
                 const div = cleanFirebaseKey(divEl ? divEl.value : '');
                 const dist = cleanFirebaseKey(e.target.value);
-                if (div && dist) {
-                    // একসঙ্গে উপজেলা ও সিটি কর্পোরেশনের চাবি চেক করা বা লোড করা
-                    loadSubDistrictsList(div, dist, subDistListId);
-                }
+                if (div && dist) loadSubDistrictsList(div, dist, subDistListId);
             });
             distEl.addEventListener("change", (e) => {
                 const div = cleanFirebaseKey(divEl ? divEl.value : '');
@@ -1249,14 +1241,11 @@
             });
         }
 
-        // উপজেলা / সিটি কর্পোরেশন ফোকাস বা ইনপুট
         if(subDistEl) {
             subDistEl.addEventListener("focus", () => {
                 const div = cleanFirebaseKey(divEl ? divEl.value : '');
                 const dist = cleanFirebaseKey(distEl ? distEl.value : '');
-                if(div && dist) {
-                    loadSubDistrictsList(div, dist, subDistListId);
-                }
+                if(div && dist) loadSubDistrictsList(div, dist, subDistListId);
             });
 
             const handleSubDistUpdate = function() {
@@ -1270,9 +1259,8 @@
                     return;
                 }
 
-                // চেক করা যাক এটি কি সিটি কর্পোরেশন নাকি উপজেলা
                 checkIsCityOrUpazila(div, dist, subVal, function(isCity) {
-                    window[formType + '_isCity'] = isCity; // স্ট্যাটাস সেভ রাখা
+                    window[formType + '_isCity'] = isCity;
                     
                     if (isCity) {
                         saveCentralLocationNode(`locations/${div}/districts/${dist}/city_corporations/${subVal}`);
@@ -1301,9 +1289,7 @@
                             thanaInput.addEventListener('focus', () => loadLocationData(thanaBasePath, `${formType}_thanaList`, `${formType}_thana`));
                             thanaInput.addEventListener('input', function() {
                                 const tVal = cleanFirebaseKey(this.value);
-                                if(div && dist && subVal && tVal) {
-                                    loadLocationData(`${thanaBasePath}/${tVal}/wards`, `${formType}_wardList`, `${formType}_ward`);
-                                }
+                                if(div && dist && subVal && tVal) loadLocationData(`${thanaBasePath}/${tVal}/wards`, `${formType}_wardList`, `${formType}_ward`);
                             });
                             thanaInput.addEventListener('change', function() {
                                 const tVal = cleanFirebaseKey(this.value);
@@ -1326,11 +1312,8 @@
                                 const tVal = cleanFirebaseKey(thanaInput ? thanaInput.value : '');
                                 const wVal = cleanFirebaseKey(this.value);
                                 if(div && dist && subVal && wVal) {
-                                    if(tVal) {
-                                        saveCentralLocationNode(`${thanaBasePath}/${tVal}/wards/${wVal}`);
-                                    } else {
-                                        saveCentralLocationNode(`locations/${div}/districts/${dist}/city_corporations/${subVal}/wards/${wVal}`);
-                                    }
+                                    if(tVal) saveCentralLocationNode(`${thanaBasePath}/${tVal}/wards/${wVal}`);
+                                    else saveCentralLocationNode(`locations/${div}/districts/${dist}/city_corporations/${subVal}/wards/${wVal}`);
                                 }
                             });
                         }
@@ -1361,9 +1344,7 @@
                             unionInput.addEventListener('focus', () => loadLocationData(unionBasePath, `${formType}_unionList`, `${formType}_union`));
                             unionInput.addEventListener('input', function() {
                                 const uVal = cleanFirebaseKey(this.value);
-                                if(div && dist && subVal && uVal) {
-                                    loadLocationData(`${unionBasePath}/${uVal}/wards`, `${formType}_wardList`, `${formType}_ward_upazila`);
-                                }
+                                if(div && dist && subVal && uVal) loadLocationData(`${unionBasePath}/${uVal}/wards`, `${formType}_wardList`, `${formType}_ward_upazila`);
                             });
                             unionInput.addEventListener('change', function() {
                                 const uVal = cleanFirebaseKey(this.value);
@@ -1386,11 +1367,8 @@
                                 const uVal = cleanFirebaseKey(unionInput ? unionInput.value : '');
                                 const wVal = cleanFirebaseKey(this.value);
                                 if(div && dist && subVal && wVal) {
-                                    if(uVal) {
-                                        saveCentralLocationNode(`${unionBasePath}/${uVal}/wards/${wVal}`);
-                                    } else {
-                                        saveCentralLocationNode(`locations/${div}/districts/${dist}/upazilas/${subVal}/wards/${wVal}`);
-                                    }
+                                    if(uVal) saveCentralLocationNode(`${unionBasePath}/${uVal}/wards/${wVal}`);
+                                    else saveCentralLocationNode(`locations/${div}/districts/${dist}/upazilas/${subVal}/wards/${wVal}`);
                                 }
                             });
                         }
@@ -1451,6 +1429,13 @@
     }
 
     async function checkIsCityOrUpazila(div, dist, subVal, callback) {
+        let lower = subVal.toLowerCase();
+        // সুনির্দিষ্টভাবে 'city corporation' বা 'সিটি কর্পোরেশন' শব্দগুচ্ছ থাকলেই কেবল সিটি কর্পোরেশন হিসেবে ধরবে
+        if(lower.includes('city corporation') || lower.includes('সিটি কর্পোরেশন') || lower.includes('citycorporation')) {
+            callback(true);
+            return;
+        }
+
         try {
             if(window.fbDb && window.fbGet && window.fbRef) {
                 const cSnap = await window.fbGet(window.fbRef(window.fbDb, `locations/${div}/districts/${dist}/city_corporations/${subVal}`));
@@ -1459,7 +1444,7 @@
                     return;
                 }
             }
-            const res = await fetch(`${DB_URL_REST}/locations/${div}/districts/${dist}/city_corporations/${subVal}.json`);
+            const res = await fetch(`${DB_URL_REST}/locations/${div}/districts/${dist}/city_corporations/${encodeURIComponent(subVal)}.json`);
             const data = await res.json();
             if(data) {
                 callback(true);
@@ -1523,13 +1508,10 @@
             if(bizCatEl) {
                 bizCatEl.addEventListener('change', (e) => {
                     const value = e.target.value.trim();
-                    if (value) {
-                       saveNewCategory(value);
-                    }
+                    if (value) saveNewCategory(value);
                 });
             }
 
-            // স্মার্ট লোকেশন সিস্টেম ইনিশিয়ালাইজেশন
             initSmartLocationSystem('merchant', "division", "divisionList", "district", "districtList", "subDistrict", "subDistrictList");
             initSmartLocationSystem('customer', "c_division", "c_divisionList", "c_district", "c_districtList", "c_subDistrict", "c_subDistrictList");
             initSmartLocationSystem('rider', "r_division", "r_divisionList", "r_district", "r_districtList", "r_subDistrict", "r_subDistrictList");
@@ -1861,7 +1843,7 @@
         }
 
         let customerOrders = JSON.parse(localStorage.getItem('cg_customer_orders') || '[]');
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         
         let seqInvoiceNo = window.generateSequentialInvoiceNo ? await window.generateSequentialInvoiceNo() : '01';
 
@@ -2113,7 +2095,7 @@
     }
 
     function loadMerchantIncomingOrders() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('merchantOrderListContainer');
         const detailView = document.getElementById('merchantIncomingOrderDetailView');
         if(!container) return;
@@ -2274,7 +2256,7 @@
     }
 
     function loadCustomerQuotations() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('customerQuotationList');
         if(!container) return;
 
@@ -2357,7 +2339,7 @@
     }
 
     function loadMerchantAcceptedOrders() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('merchantAcceptedOrderList');
         if(!container) return;
 
@@ -2401,7 +2383,7 @@
     }
 
     function loadMerchantOrderBox() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('merchantOrderBoxList');
         if(!container) return;
 
@@ -2483,7 +2465,7 @@
     }
 
     function riderAcceptOrder(orderId) {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         let allOrders = JSON.parse(localStorage.getItem('cg_customer_orders') || '[]');
         let ordObj = allOrders.find(o => o.orderId === orderId);
         if(ordObj) {
@@ -2531,7 +2513,7 @@
     }
 
     function loadCustomerPortalData() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         let allOrders = JSON.parse(localStorage.getItem('cg_customer_orders') || '[]');
         let archives = JSON.parse(localStorage.getItem('cg_merchant_archives') || '[]');
 
@@ -2667,7 +2649,7 @@
     }
 
     function loadMerchantCodOrders() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('merchantCodOrderList');
         if(!container) return;
 
@@ -2734,7 +2716,7 @@
     }
 
     function loadMerchantClientArchiveFolders() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('merchantClientArchiveFolders');
         if(!container) return;
 
@@ -2784,7 +2766,7 @@
         document.getElementById('merchantClientArchiveFolders').style.display = 'none';
         document.getElementById('merchantClientArchiveDetailView').style.display = 'block';
 
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('merchantSpecificClientInvoices');
         let archives = JSON.parse(localStorage.getItem('cg_merchant_archives') || '[]');
         let clientInvs = archives.filter(o => o.targetMerchantUsername === activeUser.username && o.customerUsername === custUsername);
@@ -2838,7 +2820,7 @@
     }
 
     function loadRiderWallet() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('riderWalletFoldersList');
         const detailView = document.getElementById('riderWalletDetailView');
         if(!container) return;
@@ -2894,7 +2876,7 @@
         const detailView = document.getElementById('riderWalletDetailView');
         detailView.style.display = 'block';
 
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         let archives = JSON.parse(localStorage.getItem('cg_merchant_archives') || '[]');
         let clientInvs = archives.filter(o => o.riderUsername === activeUser.username && (o.customerUsername === custUsername));
 
@@ -2934,7 +2916,7 @@
     }
 
     function loadMerchantDueCustomers() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('merchantDueCustomerList');
         const detailView = document.getElementById('merchantCustomerDueDetailView');
         if(!container) return;
@@ -2991,7 +2973,7 @@
         let detailView = document.getElementById('merchantCustomerDueDetailView');
         detailView.style.display = 'block';
 
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         let dueList = JSON.parse(localStorage.getItem('cg_due_invoices') || '[]');
         let myDues = dueList.filter(o => o.targetMerchantUsername === activeUser.username && o.customerUsername === custUsername && o.remainingDue > 0);
 
@@ -3076,7 +3058,7 @@
     }
 
     function loadCustomerDueData() {
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         const container = document.getElementById('customerDueFoldersList');
         const detailView = document.getElementById('customerDueDetailView');
         const totalDueDisplay = document.getElementById('customerTotalDueDisplay');
@@ -3133,7 +3115,7 @@
         const detailView = document.getElementById('customerDueDetailView');
         detailView.style.display = 'block';
 
-        const activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
+        let activeUser = JSON.parse(localStorage.getItem('cg_active_user') || '{}');
         let dueList = JSON.parse(localStorage.getItem('cg_due_invoices') || '[]');
         let merchantDues = dueList.filter(o => o.customerUsername === activeUser.username && o.targetMerchantUsername === merchantUsername && o.remainingDue > 0);
 
