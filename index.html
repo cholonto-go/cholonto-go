@@ -244,7 +244,7 @@
                 <input type="text" id="mTradeLicense" required placeholder="ট্রেড লাইসেন্স নাম্বার">
             </div>
 
-            <!-- বিভাগ ও জেলা একই লাইনে পাশাপাশি সাজানো হয়েছে -->
+            <!-- বিভাগ ও জেলা একই লাইনে পাশাপাশি -->
             <div class="address-group">
               <div class="row-fields">
                   <div>
@@ -259,7 +259,17 @@
                   </div>
               </div>
 
-              <label for="subDistrict" style="margin-top: 8px;">উপজেলা / সিটি কর্পোরেশন</label>
+              <!-- রেডিও চেকবক্স: উপজেলা বনাম সিটি কর্পোরেশন -->
+              <div style="margin-top: 10px; margin-bottom: 6px; display: flex; gap: 15px; align-items: center;">
+                  <label style="margin:0; font-weight: normal; cursor: pointer;">
+                      <input type="radio" name="merchant_loc_type" id="m_type_upazila" value="upazila" onchange="onLocationTypeChange('merchant')" checked> উপজেলা
+                  </label>
+                  <label style="margin:0; font-weight: normal; cursor: pointer;">
+                      <input type="radio" name="merchant_loc_type" id="m_type_city" value="city" onchange="onLocationTypeChange('merchant')"> সিটি কর্পোরেশন
+                  </label>
+              </div>
+
+              <label id="merchantSubDistLabel" for="subDistrict" style="margin-top: 4px;">উপজেলা</label>
               <input type="text" id="subDistrict" list="subDistrictList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
               <datalist id="subDistrictList"></datalist>
 
@@ -332,7 +342,7 @@
                 <input type="tel" id="cMobile" required placeholder="01XXXXXXXXX">
             </div>
 
-            <!-- বিভাগ ও জেলা একই লাইনে পাশাপাশি সাজানো হয়েছে -->
+            <!-- বিভাগ ও জেলা একই লাইনে পাশাপাশি -->
             <div class="address-group">
               <div class="row-fields">
                   <div>
@@ -347,7 +357,17 @@
                   </div>
               </div>
 
-              <label for="c_subDistrict" style="margin-top: 8px;">উপজেলা / সিটি কর্পোরেশন</label>
+              <!-- রেডিও চেকবক্স: উপজেলা বনাম সিটি কর্পোরেশন -->
+              <div style="margin-top: 10px; margin-bottom: 6px; display: flex; gap: 15px; align-items: center;">
+                  <label style="margin:0; font-weight: normal; cursor: pointer;">
+                      <input type="radio" name="customer_loc_type" id="c_type_upazila" value="upazila" onchange="onLocationTypeChange('customer')" checked> উপজেলা
+                  </label>
+                  <label style="margin:0; font-weight: normal; cursor: pointer;">
+                      <input type="radio" name="customer_loc_type" id="c_type_city" value="city" onchange="onLocationTypeChange('customer')"> সিটি কর্পোরেশন
+                  </label>
+              </div>
+
+              <label id="customerSubDistLabel" for="c_subDistrict" style="margin-top: 4px;">উপজেলা</label>
               <input type="text" id="c_subDistrict" list="c_subDistrictList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
               <datalist id="c_subDistrictList"></datalist>
 
@@ -418,7 +438,7 @@
                 <input type="tel" id="rMobile" required placeholder="01XXXXXXXXX">
             </div>
 
-            <!-- বিভাগ ও জেলা একই লাইনে পাশাপাশি সাজানো হয়েছে -->
+            <!-- বিভাগ ও জেলা একই লাইনে পাশাপাশি -->
             <div class="address-group">
               <div class="row-fields">
                   <div>
@@ -433,7 +453,17 @@
                   </div>
               </div>
 
-              <label for="r_subDistrict" style="margin-top: 8px;">উপজেলা / সিটি কর্পোরেশন</label>
+              <!-- রেডিও চেকবক্স: উপজেলা বনাম সিটি কর্পোরেশন -->
+              <div style="margin-top: 10px; margin-bottom: 6px; display: flex; gap: 15px; align-items: center;">
+                  <label style="margin:0; font-weight: normal; cursor: pointer;">
+                      <input type="radio" name="rider_loc_type" id="r_type_upazila" value="upazila" onchange="onLocationTypeChange('rider')" checked> উপজেলা
+                  </label>
+                  <label style="margin:0; font-weight: normal; cursor: pointer;">
+                      <input type="radio" name="rider_loc_type" id="r_type_city" value="city" onchange="onLocationTypeChange('rider')"> সিটি কর্পোরেশন
+                  </label>
+              </div>
+
+              <label id="riderSubDistLabel" for="r_subDistrict" style="margin-top: 4px;">উপজেলা</label>
               <input type="text" id="r_subDistrict" list="r_subDistrictList" placeholder="টাইপ করুন বা সিলেক্ট করুন" required>
               <datalist id="r_subDistrictList"></datalist>
 
@@ -779,6 +809,14 @@
       };
       const app = initializeApp(firebaseConfig);
       db = getDatabase(app);
+
+      // গ্লোবাল হিসেবে এক্সপোজ করা হলো যাতে সাধারণ স্ক্রিপ্ট ব্লক থেকেও ফায়ারবেসে সরাসরি রাইট করা যায়
+      window.fbDb = db;
+      window.fbRef = ref;
+      window.fbSet = set;
+      window.fbGet = get;
+      window.fbChild = child;
+
       startRealtimeSync();
   } catch(err) {
       console.warn("Firebase Init Error/Offline mode:", err);
@@ -983,10 +1021,17 @@
 </script>
 
 <script>
+    const DB_URL_REST = "https://cholonto-go-default-rtdb.firebaseio.com";
     let activeMerchantShop = null;
     let currentPaymentCallback = null;
 
-    // ইউজারনেম ফিল্ডে স্পেস, ডট, হাইফেন বা অন্য কোনো স্পেশাল ক্যারেক্টার ব্লক করার ফাংশন
+    // ফায়ারবেস কী-সেফ ক্লিনার (ফায়ারবেসে অবৈধ ক্যারেক্টার রিমুভ করে যাতে কোনো এরর ছাড়াই সেভ হয়)
+    function cleanFirebaseKey(str) {
+        if (!str) return '';
+        return String(str).trim().replace(/[.#$[\]/]/g, "-");
+    }
+
+    // ইউজারনেম ফিল্ডে স্পেস, ডট, হাইফেন ব্লক করার ফাংশন
     window.validateUsernameInput = function(inputEl) {
         inputEl.value = inputEl.value.replace(/[^a-zA-Z0-9]/g, '');
     };
@@ -1023,12 +1068,12 @@
       const filterList = document.getElementById('custShopCategoryFilter');
       try {
         let data = null;
-        if(db) {
-            const snap = await get(ref(db, 'businessCategories'));
+        if(window.fbDb && window.fbGet && window.fbRef) {
+            const snap = await window.fbGet(window.fbRef(window.fbDb, 'businessCategories'));
             if(snap.exists()) data = snap.val();
         }
         if(!data) {
-            const res = await fetch(`${DB_URL}/businessCategories.json`);
+            const res = await fetch(`${DB_URL_REST}/businessCategories.json`);
             data = await res.json();
         }
         if(list) list.innerHTML = '';
@@ -1055,11 +1100,13 @@
     }
 
     async function saveNewCategory(categoryName) {
+      const safeCat = cleanFirebaseKey(categoryName);
+      if(!safeCat) return;
       try {
-        if(db) {
-            await set(ref(db, `businessCategories/${categoryName}`), { active: true });
+        if(window.fbDb && window.fbSet && window.fbRef) {
+            await window.fbSet(window.fbRef(window.fbDb, `businessCategories/${safeCat}`), { active: true });
         } else {
-            await fetch(`${DB_URL}/businessCategories/${categoryName}.json`, {
+            await fetch(`${DB_URL_REST}/businessCategories/${encodeURIComponent(safeCat)}.json`, {
               method: "PUT",
               body: JSON.stringify({ active: true })
             });
@@ -1070,173 +1117,305 @@
       }
     }
 
-    async function fetchOrCreateDynamicData(path, value) {
-      if (!value) return;
+    // সেন্ট্রাল লোকেশন ডাটাবেসে নতুন নোড যোগ করা (বিদ্যমান চাইল্ড নোড না মুছে)
+    async function saveCentralLocationNode(nodePath) {
+      if (!nodePath) return;
       try {
-        let cleanVal = String(value).trim();
-        if(!cleanVal) return;
-        
-        let data = null;
-        if(db) {
-            const snap = await get(ref(db, path));
-            if(snap.exists()) data = snap.val();
-        }
-        let exists = false;
-        if (data) {
-          Object.keys(data).forEach(key => {
-            if (String(key).toLowerCase() === cleanVal.toLowerCase()) {
-              exists = true;
-            }
-          });
-        }
-        if (!exists) {
-          if(db) {
-              await set(ref(db, `${path}/${cleanVal}`), { active: true });
-          } else {
-              await fetch(`${DB_URL}/${path}/${cleanVal}.json`, {
+        if(window.fbDb && window.fbSet && window.fbRef) {
+            await window.fbSet(window.fbRef(window.fbDb, `${nodePath}/_active`), true);
+        } else {
+            await fetch(`${DB_URL_REST}/${nodePath}/_active.json`, {
                 method: 'PUT',
-                body: JSON.stringify({ active: true })
-              });
-          }
+                body: JSON.stringify(true)
+            });
         }
       } catch (error) {
-        console.error("Firebase sync error:", error);
+        console.error("Central Location Sync Error:", error);
       }
     }
 
+    // পূর্ণাঙ্গ হায়ারার্কিক্যাল লোকেশন ট্রি ফায়ারবেসের `locations` রুটে সংরক্ষণ করা
+    // স্ট্রাকচার: locations -> বিভাগ -> districts -> জেলা -> upazilas/city_corporations -> নাম -> unions/thanas -> নাম -> wards -> নাম
+    async function syncFullLocationHierarchy(locObj) {
+        const div = cleanFirebaseKey(locObj.division);
+        const dist = cleanFirebaseKey(locObj.district);
+        const subDist = cleanFirebaseKey(locObj.subDistrict);
+        const isCity = locObj.locationType === 'city';
+        const union = cleanFirebaseKey(locObj.union);
+        const thana = cleanFirebaseKey(locObj.thana);
+        const ward = cleanFirebaseKey(locObj.ward);
+
+        if (!div) return;
+        await saveCentralLocationNode(`locations/${div}`);
+
+        if (!dist) return;
+        await saveCentralLocationNode(`locations/${div}/districts/${dist}`);
+
+        if (!subDist) return;
+        if (isCity) {
+            await saveCentralLocationNode(`locations/${div}/districts/${dist}/city_corporations/${subDist}`);
+            if (thana) {
+                await saveCentralLocationNode(`locations/${div}/districts/${dist}/city_corporations/${subDist}/thanas/${thana}`);
+                if (ward) {
+                    await saveCentralLocationNode(`locations/${div}/districts/${dist}/city_corporations/${subDist}/thanas/${thana}/wards/${ward}`);
+                }
+            } else if (ward) {
+                await saveCentralLocationNode(`locations/${div}/districts/${dist}/city_corporations/${subDist}/wards/${ward}`);
+            }
+        } else {
+            await saveCentralLocationNode(`locations/${div}/districts/${dist}/upazilas/${subDist}`);
+            if (union) {
+                await saveCentralLocationNode(`locations/${div}/districts/${dist}/upazilas/${subDist}/unions/${union}`);
+                if (ward) {
+                    await saveCentralLocationNode(`locations/${div}/districts/${dist}/upazilas/${subDist}/unions/${union}/wards/${ward}`);
+                }
+            } else if (ward) {
+                await saveCentralLocationNode(`locations/${div}/districts/${dist}/upazilas/${subDist}/wards/${ward}`);
+            }
+        }
+    }
+
+    // সেন্ট্রাল `locations` ট্রি থেকে ড্রপডাউন লিস্ট লোড করা
     async function loadLocationData(nodePath, listId, inputId) {
       const list = document.getElementById(listId);
       const inputEl = document.getElementById(inputId);
-      if(!list || !inputEl) return;
+      if(!list) return;
       
       try {
         let data = null;
-        if(db) {
-            const snap = await get(ref(db, nodePath));
+        if(window.fbDb && window.fbGet && window.fbRef) {
+            const snap = await window.fbGet(window.fbRef(window.fbDb, nodePath));
             if(snap.exists()) data = snap.val();
         }
         if(!data) {
-            const res = await fetch(`${DB_URL}/${nodePath}.json`);
+            const res = await fetch(`${DB_URL_REST}/${nodePath}.json`);
             data = await res.json();
         }
         
         list.innerHTML = '';
-        if (data) {
+        if (data && typeof data === 'object') {
           Object.keys(data).forEach(key => {
-            const option = document.createElement('option');
-            option.value = key;
-            list.appendChild(option);
+            if (key !== '_active' && key !== 'active') {
+                const option = document.createElement('option');
+                option.value = key;
+                list.appendChild(option);
+            }
           });
         }
-        inputEl.disabled = false;
+        if(inputEl) inputEl.disabled = false;
       } catch (err) {
-        console.error(err);
+        console.error("Location load error:", err);
       }
     }
 
-    // উপজেলা ও সিটি কর্পোরেশন লজিক সম্বলিত ডাইনামিক লোকেশন সিস্টেম
+    // রেডিও বাটন পরিবর্তনের মাধ্যমে উপজেলা বা সিটি কর্পোরেশন সিলেকশন লজিক
+    window.onLocationTypeChange = function(formType) {
+        const prefix = formType === 'merchant' ? 'm' : (formType === 'customer' ? 'c' : 'r');
+        const isCity = document.getElementById(`${prefix}_type_city`).checked;
+        const labelEl = document.getElementById(`${formType}SubDistLabel`);
+        const inputEl = document.getElementById(formType === 'merchant' ? 'subDistrict' : `${formType}_subDistrict`);
+        const subDistListId = formType === 'merchant' ? 'subDistrictList' : `${formType}_subDistrictList`;
+        const subContainer = document.getElementById(formType === 'merchant' ? 'subLocationContainer' : `${formType}_subLocationContainer`);
+
+        if(inputEl) inputEl.value = '';
+        if(subContainer) subContainer.innerHTML = '';
+
+        const divEl = document.getElementById(formType === 'merchant' ? 'division' : `${formType}_division`);
+        const distEl = document.getElementById(formType === 'merchant' ? 'district' : `${formType}_district`);
+        const div = cleanFirebaseKey(divEl ? divEl.value : '');
+        const dist = cleanFirebaseKey(distEl ? distEl.value : '');
+
+        if(isCity) {
+            if(labelEl) labelEl.innerText = "সিটি কর্পোরেশন";
+            if(inputEl) inputEl.placeholder = "সিটি কর্পোরেশন লিখুন বা সিলেক্ট করুন";
+            if(div && dist) {
+                loadLocationData(`locations/${div}/districts/${dist}/city_corporations`, subDistListId, inputEl ? inputEl.id : '');
+            }
+        } else {
+            if(labelEl) labelEl.innerText = "উপজেলা";
+            if(inputEl) inputEl.placeholder = "উপজেলা লিখুন বা সিলেক্ট করুন";
+            if(div && dist) {
+                loadLocationData(`locations/${div}/districts/${dist}/upazilas`, subDistListId, inputEl ? inputEl.id : '');
+            }
+        }
+    };
+
+    // ডাইনামিক হায়ারার্কিক্যাল লোকেশন সিস্টেম (বিভাগ -> জেলা -> উপজেলা/সিটি -> ইউনিয়ন/থানা -> ওয়ার্ড)
     function initDatalistLocationSystem(formType, divInputId, divListId, distInputId, distListId, subDistInputId, subDistListId) {
         const divEl = document.getElementById(divInputId);
         const distEl = document.getElementById(distInputId);
         const subDistEl = document.getElementById(subDistInputId);
         const subContainerId = formType === 'merchant' ? 'subLocationContainer' : `${formType}_subLocationContainer`;
         const subContainer = document.getElementById(subContainerId);
+        const prefix = formType === 'merchant' ? 'm' : (formType === 'customer' ? 'c' : 'r');
 
         if(divEl) {
             divEl.addEventListener("input", (e) => {
-                const div = e.target.value.trim();
+                const div = cleanFirebaseKey(e.target.value);
                 if (div) {
-                    fetchOrCreateDynamicData('locations', div);
-                    loadLocationData(`locations/${div}`, distListId, distInputId);
+                    loadLocationData(`locations/${div}/districts`, distListId, distInputId);
                 } else {
-                    if(distEl) { distEl.value = ''; }
-                    if(subDistEl) { subDistEl.value = ''; }
+                    if(distEl) distEl.value = '';
+                    if(subDistEl) subDistEl.value = '';
                     if(subContainer) subContainer.innerHTML = '';
                 }
             });
             divEl.addEventListener("change", (e) => {
-                const div = e.target.value.trim();
-                if (div) fetchOrCreateDynamicData('locations', div);
+                const div = cleanFirebaseKey(e.target.value);
+                if (div) {
+                    saveCentralLocationNode(`locations/${div}`);
+                    loadLocationData(`locations/${div}/districts`, distListId, distInputId);
+                }
             });
         }
 
         if(distEl) {
             distEl.addEventListener("input", (e) => {
-                const div = divEl ? divEl.value.trim() : '';
-                const dist = e.target.value.trim();
+                const div = cleanFirebaseKey(divEl ? divEl.value : '');
+                const dist = cleanFirebaseKey(e.target.value);
+                const isCity = document.getElementById(`${prefix}_type_city`).checked;
                 if (div && dist) {
-                    fetchOrCreateDynamicData(`locations/${div}`, dist);
-                    loadLocationData(`locations/${div}/${dist}`, subDistListId, subDistInputId);
+                    const typeFolder = isCity ? 'city_corporations' : 'upazilas';
+                    loadLocationData(`locations/${div}/districts/${dist}/${typeFolder}`, subDistListId, subDistInputId);
                 } else {
-                    if(subDistEl) { subDistEl.value = ''; }
+                    if(subDistEl) subDistEl.value = '';
                     if(subContainer) subContainer.innerHTML = '';
                 }
             });
             distEl.addEventListener("change", (e) => {
-                const div = divEl ? divEl.value.trim() : '';
-                const dist = e.target.value.trim();
-                if (div && dist) fetchOrCreateDynamicData(`locations/${div}`, dist);
+                const div = cleanFirebaseKey(divEl ? divEl.value : '');
+                const dist = cleanFirebaseKey(e.target.value);
+                const isCity = document.getElementById(`${prefix}_type_city`).checked;
+                if (div && dist) {
+                    saveCentralLocationNode(`locations/${div}/districts/${dist}`);
+                    const typeFolder = isCity ? 'city_corporations' : 'upazilas';
+                    loadLocationData(`locations/${div}/districts/${dist}/${typeFolder}`, subDistListId, subDistInputId);
+                }
             });
         }
 
         if(subDistEl) {
-            subDistEl.addEventListener("input", function() {
-                const div = divEl ? divEl.value.trim() : '';
-                const dist = distEl ? distEl.value.trim() : '';
-                const subDist = this.value.trim();
-                if (div && dist && subDist) {
-                    fetchOrCreateDynamicData(`locations/${div}/${dist}`, subDist);
+            const handleSubDistUpdate = function() {
+                const div = cleanFirebaseKey(divEl ? divEl.value : '');
+                const dist = cleanFirebaseKey(distEl ? distEl.value : '');
+                const subDist = cleanFirebaseKey(this.value);
+                const isCity = document.getElementById(`${prefix}_type_city`).checked;
+
+                if(!subContainer) return;
+
+                if (!subDist) {
+                    subContainer.innerHTML = "";
+                    return;
                 }
 
-                const selectedVal = this.value.toLowerCase();
-                if(subContainer) subContainer.innerHTML = "";
+                if (div && dist && subDist) {
+                    const typeFolder = isCity ? 'city_corporations' : 'upazilas';
+                    saveCentralLocationNode(`locations/${div}/districts/${dist}/${typeFolder}/${subDist}`);
+                }
 
-                // যদি সিটি কর্পোরেশন সিলেক্ট করা হয়, তবে থানা ও ওয়ার্ড আসবে
-                if (selectedVal.includes('সিটি কর্পোরেশন') || selectedVal.includes('city corporation')) {
+                if (isCity) {
+                    const thanaBasePath = `locations/${div}/districts/${dist}/city_corporations/${subDist}/thanas`;
                     subContainer.innerHTML = `
                       <div style="display: flex; gap: 8px; margin-top: 6px;">
                         <div style="flex: 1;">
                           <label>থানা (Thana)</label>
-                          <input type="text" id="${formType}_thana" list="${formType}_thanaList" placeholder="থানা লিখুন" onblur="if(this.value.trim()){ fetchOrCreateDynamicData('locations/thanas', this.value.trim()); }">
+                          <input type="text" id="${formType}_thana" list="${formType}_thanaList" placeholder="থানা সিলেক্ট বা লিখুন">
                           <datalist id="${formType}_thanaList"></datalist>
                         </div>
                         <div style="flex: 1;">
                           <label>ওয়ার্ড (Ward)</label>
-                          <input type="text" id="${formType}_ward" list="${formType}_wardList" placeholder="নাম (নম্বর)" onblur="if(this.value.trim()){ fetchOrCreateDynamicData('locations/wards', this.value.trim()); }">
+                          <input type="text" id="${formType}_ward" list="${formType}_wardList" placeholder="নাম (নম্বর)">
                           <datalist id="${formType}_wardList"></datalist>
                         </div>
                       </div>
                     `;
-                    loadLocationData('locations/thanas', `${formType}_thanaList`, `${formType}_thana`);
-                    loadLocationData('locations/wards', `${formType}_wardList`, `${formType}_ward`);
-                } else if(selectedVal) {
-                    // উপজেলা হলে ইউনিয়ন ও ওয়ার্ড আসবে
+                    if(div && dist) loadLocationData(thanaBasePath, `${formType}_thanaList`, `${formType}_thana`);
+
+                    const thanaInput = document.getElementById(`${formType}_thana`);
+                    const wardInput = document.getElementById(`${formType}_ward`);
+
+                    if(thanaInput) {
+                        thanaInput.addEventListener('input', function() {
+                            const tVal = cleanFirebaseKey(this.value);
+                            if(div && dist && subDist && tVal) {
+                                loadLocationData(`${thanaBasePath}/${tVal}/wards`, `${formType}_wardList`, `${formType}_ward`);
+                            }
+                        });
+                        thanaInput.addEventListener('change', function() {
+                            const tVal = cleanFirebaseKey(this.value);
+                            if(div && dist && subDist && tVal) {
+                                saveCentralLocationNode(`${thanaBasePath}/${tVal}`);
+                                loadLocationData(`${thanaBasePath}/${tVal}/wards`, `${formType}_wardList`, `${formType}_ward`);
+                            }
+                        });
+                    }
+                    if(wardInput) {
+                        wardInput.addEventListener('change', function() {
+                            const tVal = cleanFirebaseKey(thanaInput ? thanaInput.value : '');
+                            const wVal = cleanFirebaseKey(this.value);
+                            if(div && dist && subDist && wVal) {
+                                if(tVal) {
+                                    saveCentralLocationNode(`${thanaBasePath}/${tVal}/wards/${wVal}`);
+                                } else {
+                                    saveCentralLocationNode(`locations/${div}/districts/${dist}/city_corporations/${subDist}/wards/${wVal}`);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    const unionBasePath = `locations/${div}/districts/${dist}/upazilas/${subDist}/unions`;
                     subContainer.innerHTML = `
                       <div style="display: flex; gap: 8px; margin-top: 6px;">
                         <div style="flex: 1;">
                           <label>ইউনিয়ন (Union)</label>
-                          <input type="text" id="${formType}_union" list="${formType}_unionList" placeholder="ইউনিয়ন লিখুন" onblur="if(this.value.trim()){ fetchOrCreateDynamicData('locations/unions', this.value.trim()); }">
+                          <input type="text" id="${formType}_union" list="${formType}_unionList" placeholder="ইউনিয়ন সিলেক্ট বা লিখুন">
                           <datalist id="${formType}_unionList"></datalist>
                         </div>
                         <div style="flex: 1;">
                           <label>ওয়ার্ড (Ward)</label>
-                          <input type="text" id="${formType}_ward_upazila" list="${formType}_wardList" placeholder="নাম (নম্বর)" onblur="if(this.value.trim()){ fetchOrCreateDynamicData('locations/wards', this.value.trim()); }">
+                          <input type="text" id="${formType}_ward_upazila" list="${formType}_wardList" placeholder="নাম (নম্বর)">
                           <datalist id="${formType}_wardList"></datalist>
                         </div>
                       </div>
                     `;
-                    loadLocationData('locations/unions', `${formType}_unionList`, `${formType}_union`);
-                    loadLocationData('locations/wards', `${formType}_wardList`, `${formType}_ward_upazila`);
+                    if(div && dist) loadLocationData(unionBasePath, `${formType}_unionList`, `${formType}_union`);
+
+                    const unionInput = document.getElementById(`${formType}_union`);
+                    const wardInput = document.getElementById(`${formType}_ward_upazila`);
+
+                    if(unionInput) {
+                        unionInput.addEventListener('input', function() {
+                            const uVal = cleanFirebaseKey(this.value);
+                            if(div && dist && subDist && uVal) {
+                                loadLocationData(`${unionBasePath}/${uVal}/wards`, `${formType}_wardList`, `${formType}_ward_upazila`);
+                            }
+                        });
+                        unionInput.addEventListener('change', function() {
+                            const uVal = cleanFirebaseKey(this.value);
+                            if(div && dist && subDist && uVal) {
+                                saveCentralLocationNode(`${unionBasePath}/${uVal}`);
+                                loadLocationData(`${unionBasePath}/${uVal}/wards`, `${formType}_wardList`, `${formType}_ward_upazila`);
+                            }
+                        });
+                    }
+                    if(wardInput) {
+                        wardInput.addEventListener('change', function() {
+                            const uVal = cleanFirebaseKey(unionInput ? unionInput.value : '');
+                            const wVal = cleanFirebaseKey(this.value);
+                            if(div && dist && subDist && wVal) {
+                                if(uVal) {
+                                    saveCentralLocationNode(`${unionBasePath}/${uVal}/wards/${wVal}`);
+                                } else {
+                                    saveCentralLocationNode(`locations/${div}/districts/${dist}/upazilas/${subDist}/wards/${wVal}`);
+                                }
+                            }
+                        });
+                    }
                 }
-            });
-            subDistEl.addEventListener("change", function() {
-                const div = divEl ? divEl.value.trim() : '';
-                const dist = distEl ? distEl.value.trim() : '';
-                const subDist = this.value.trim();
-                if (div && dist && subDist) {
-                    fetchOrCreateDynamicData(`locations/${div}/${dist}`, subDist);
-                }
-            });
+            };
+
+            subDistEl.addEventListener("change", handleSubDistUpdate);
+            subDistEl.addEventListener("blur", handleSubDistUpdate);
         }
     }
 
@@ -1300,6 +1479,7 @@
                 });
             }
 
+            // সেন্ট্রাল `locations` রুট থেকে বিভাগগুলোর তালিকা লোড করা
             loadLocationData("locations", "divisionList", "division");
             initDatalistLocationSystem('merchant', "division", "divisionList", "district", "districtList", "subDistrict", "subDistrictList");
 
@@ -2964,6 +3144,9 @@
             }
         }
 
+        // সেন্ট্রাল লোকেশন ডাটাবেসে (`locations` রুটে) ধাপে ধাপে লোকেশন সিংক করা
+        await syncFullLocationHierarchy(newUser);
+
         newUser.uniqueId = window.generateGlobalUniqueId ? await window.generateGlobalUniqueId(counterName) : '000001';
 
         let users = JSON.parse(localStorage.getItem('cg_all_users') || '[]');
@@ -2990,6 +3173,7 @@
                 alert('ব্যাংক অ্যাকাউন্ট নম্বরটি অবশ্যই ঠিক ১৩ ডিজিটের হতে হবে!');
                 return;
             }
+            const isCity = document.getElementById('m_type_city').checked;
             const newUser = {
                 username: document.getElementById('mRegUsername').value.trim(),
                 pass: document.getElementById('mRegPassword').value.trim(),
@@ -3009,6 +3193,7 @@
                 bankRouting: document.getElementById('regBankRouting') ? document.getElementById('regBankRouting').value.trim() : '',
                 bkash: document.getElementById('regBkashNo') ? document.getElementById('regBkashNo').value.trim() : '',
                 nagad: document.getElementById('regNagadNo') ? document.getElementById('regNagadNo').value.trim() : '',
+                locationType: isCity ? 'city' : 'upazila',
                 division: document.getElementById('division') ? document.getElementById('division').value.trim() : '',
                 district: document.getElementById('district') ? document.getElementById('district').value.trim() : '',
                 subDistrict: document.getElementById('subDistrict') ? document.getElementById('subDistrict').value.trim() : '',
@@ -3027,6 +3212,7 @@
     if(customerRegForm) {
         customerRegForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            const isCity = document.getElementById('c_type_city').checked;
             const newUser = {
                 username: document.getElementById('cRegUsername').value.trim(),
                 pass: document.getElementById('cRegPassword').value.trim(),
@@ -3035,6 +3221,7 @@
                 nid: document.getElementById('cNid').value.trim(),
                 mobile: document.getElementById('cMobile').value.trim(),
                 nidImg: window.cNidBase64 || '',
+                locationType: isCity ? 'city' : 'upazila',
                 division: document.getElementById('c_division') ? document.getElementById('c_division').value.trim() : '',
                 district: document.getElementById('c_district') ? document.getElementById('c_district').value.trim() : '',
                 subDistrict: document.getElementById('c_subDistrict') ? document.getElementById('c_subDistrict').value.trim() : '',
@@ -3053,6 +3240,7 @@
     if(riderRegForm) {
         riderRegForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            const isCity = document.getElementById('r_type_city').checked;
             const newUser = {
                 username: document.getElementById('rRegUsername').value.trim(),
                 pass: document.getElementById('rRegPassword').value.trim(),
@@ -3062,6 +3250,7 @@
                 mobile: document.getElementById('rMobile').value.trim(),
                 nidImg: window.rNidBase64 || '',
                 profileImg: window.rProfileBase64 || '',
+                locationType: isCity ? 'city' : 'upazila',
                 division: document.getElementById('r_division') ? document.getElementById('r_division').value.trim() : '',
                 district: document.getElementById('r_district') ? document.getElementById('r_district').value.trim() : '',
                 subDistrict: document.getElementById('r_subDistrict') ? document.getElementById('r_subDistrict').value.trim() : '',
