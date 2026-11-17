@@ -46,10 +46,10 @@
         
         .page { display: none; width: 100%; box-sizing: border-box; }
         .active-page { display: block; }
-        .card { background: #ffffff; border: 1px solid #e1e4e8; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; width: 100%; overflow-x: auto; }
+        .card { background: #ffffff; border: none; padding: 15px 0; border-radius: 0; margin-bottom: 15px; box-sizing: border-box; width: 100%; overflow-x: auto; box-shadow: none; }
         
-        /* ফুল পেজ প্লেইন ইনভয়েস লেআউট (বর্ডারহীন) */
-        .memo-box { background: #fff; padding: 5px 0; margin-bottom: 15px; position: relative; width: 100%; box-sizing: border-box; overflow-x: auto; border: none; }
+        /* ফুল পেজ প্লেইন ইনভয়েস ও ফর্ম লেআউট (বর্ডারহীন) */
+        .memo-box { background: #fff; padding: 5px 0; margin-bottom: 15px; position: relative; width: 100%; box-sizing: border-box; overflow-x: auto; border: none; box-shadow: none; }
         
         .invoice-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; position: relative; flex-wrap: wrap; gap: 5px; }
         .invoice-no-box { display: inline-block; background: #e2f0d9; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
@@ -62,7 +62,7 @@
         .shop-name { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 2px; display: inline-block; }
         .shop-underline { height: 2px; background: #28a745; width: 100%; margin: 0 auto; }
 
-        /* গ্রাহক বামে এবং মার্চেন্ট ডানে পাশাপাশি প্লেইন লেআউট */
+        /* গ্রাহক বামে এবং মার্চেন্ট ডানে সোজাসুজি প্লেইন লেআউট */
         .invoice-grid { display: flex; gap: 15px; margin-top: 15px; margin-bottom: 10px; flex-wrap: wrap; }
         .invoice-grid-col { flex: 1; min-width: 200px; padding: 4px 0; font-size: 12px; line-height: 1.4; background: transparent; border: none; }
 
@@ -70,31 +70,33 @@
         .payment-middle-display { text-align: center; font-size: 12px; font-weight: bold; color: #333; margin: 8px 0; background: #f1f1f1; padding: 5px; border-radius: 4px; }
 
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 8px; }
-        table { width: 100%; border-collapse: collapse; min-width: 320px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12.5px; word-break: break-word; }
-        th { background-color: #28a745; color: white; }
+        table { width: 100%; border-collapse: collapse; min-width: 320px; border: none; }
+        th, td { border: none; border-bottom: 1px solid #eee; padding: 8px; text-align: center; font-size: 12.5px; word-break: break-word; }
+        th { background-color: #28a745; color: white; border: none; }
         
         th.col-item, td.col-item { width: 35%; text-align: left; padding-left: 10px; }
         th.col-qty, td.col-qty { width: 25%; }
         th.col-rate, td.col-rate { width: 20%; }
         th.col-total, td.col-total { width: 20%; }
 
-        .input-box { width: 100%; padding: 6px !important; text-align: center; border: 1px solid #bbb; border-radius: 4px; box-sizing: border-box; font-size: 12.5px; }
+        /* টেবিলের ভেতরের ইনপুট বক্স পরিষ্কার করা */
+        .input-box { width: 100%; padding: 6px !important; text-align: center; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 12.5px; background: #fff; }
         
-        .table-total-row { background: #fff9e6; font-weight: bold; text-align: right; }
-        .table-total-row td { text-align: right !important; padding-right: 12px; }
+        .table-total-row { background: #fff9e6; font-weight: bold; text-align: right; border: none; }
+        .table-total-row td { text-align: right !important; padding-right: 12px; border: none; }
 
+        /* মেনুবার বা ট্যাব বোতাম ছোট করে দুই লাইনে সাজানো */
         .sub-nav-tabs { display: flex; gap: 6px; margin-bottom: 15px; background: #e9ecef; padding: 6px; border-radius: 6px; flex-wrap: wrap; width: 100%; box-sizing: border-box; overflow-x: auto; }
-        .sub-nav-tabs button { margin-top: 0; width: auto; padding: 7px 10px; font-size: 12px; background: #6c757d; border: none; color: white; border-radius: 4px; cursor: pointer; flex: 1; min-width: 100px; position: relative; }
+        .sub-nav-tabs button { margin-top: 0; width: auto; padding: 6px 8px; font-size: 11.5px; line-height: 1.2; background: #6c757d; border: none; color: white; border-radius: 4px; cursor: pointer; flex: 1; min-width: 90px; max-width: 140px; position: relative; white-space: normal; text-align: center; word-break: break-word; }
         .sub-nav-tabs button:hover { background: #5a6268; }
 
         .badge-count { background: #dc3545; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; position: absolute; top: -6px; right: -6px; font-weight: bold; display: inline-block; }
         
-        .payment-box { background: #e2f0d9; border: 1px solid #c8e6b8; padding: 12px; border-radius: 6px; margin-top: 12px; font-size: 13.5px; }
+        .payment-box { background: #e2f0d9; border: none; padding: 12px; border-radius: 6px; margin-top: 12px; font-size: 13.5px; }
         .choice-box { text-align: center; padding: 20px 10px; }
         .choice-box button { margin-bottom: 12px; padding: 14px; font-size: 15px; }
 
-        .notification-container { background: #fff3cd; border: 1px solid #ffeeba; padding: 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; color: #856404; max-height: 250px; overflow-y: auto; }
+        .notification-container { background: #fff3cd; border: none; padding: 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; color: #856404; max-height: 250px; overflow-y: auto; }
         
         .dashboard-header-title { text-align: center; font-size: 18px; font-weight: bold; color: #333; margin: 5px 0 15px 0; }
         .dashboard-header-title span { display: inline-block; padding-bottom: 4px; border-bottom: 2px solid #28a745; }
@@ -104,6 +106,10 @@
 
         .dash-compact-corner-btn { background-color: #343a40; color: #ffc107; border: none; padding: 6px 14px; font-size: 12px; font-weight: bold; border-radius: 4px; display: inline-block; cursor: pointer; text-align: left; width: auto; min-width: 75px; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
         .dash-compact-corner-btn:hover { background-color: #23272b; }
+
+        /* টেবিলের ওপেন বাটন এক লাইনে রাখার জন্য ফিক্সড উইথ */
+        .table-open-btn { background-color: #007bff; color: white; border: none; padding: 5px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; white-space: nowrap; width: auto !important; min-width: 55px; display: inline-block; text-align: center; margin: 0; }
+        .table-open-btn:hover { background-color: #0056b3; }
 
         #paymentModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; box-sizing: border-box; padding: 10px; }
         .payment-modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 100%; max-width: 380px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); box-sizing: border-box; }
@@ -213,7 +219,7 @@
                   <svg id="mRegEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
-                    <line x1="4" y1="20" x2="20" y2="4"></line>
+                    <line x1="20" y1="4" x2="4" y2="20"></line>
                   </svg>
                 </button>
               </div>
@@ -349,7 +355,7 @@
                   <svg id="cRegEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
-                    <line x1="4" y1="20" x2="20" y2="4"></line>
+                    <line x1="20" y1="4" x2="4" y2="20"></line>
                   </svg>
                 </button>
               </div>
@@ -439,7 +445,7 @@
                   <svg id="rRegEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
-                    <line x1="4" y1="20" x2="20" y2="4"></line>
+                    <line x1="20" y1="4" x2="4" y2="20"></line>
                   </svg>
                 </button>
               </div>
@@ -530,7 +536,7 @@
                   <svg id="loginEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
-                    <line x1="4" y1="20" x2="20" y2="4"></line>
+                    <line x1="20" y1="4" x2="4" y2="20"></line>
                   </svg>
                 </button>
               </div>
@@ -670,10 +676,10 @@
 
             <div id="customerActualOrderFormView" style="display:none;">
                 <div class="card">
-                    <!-- দোকান পরিবর্তন বাটন ও শিরোনাম বিন্যাস (বাটন বামে, শিরোনাম ঠিক নিচে এবং মাঝ বরাবর) -->
-                    <div style="position: relative; margin-bottom: 18px; min-height: 38px;">
+                    <!-- দোকান পরিবর্তন বাটন বামে এবং শিরোনাম ঠিক নিচে এবং মাঝ বরাবর -->
+                    <div style="position: relative; margin-bottom: 25px; min-height: 40px;">
                         <button type="button" class="dash-compact-corner-btn" onclick="backToShopSelector()" style="position: absolute; left: 0; top: 0; margin: 0;">← দোকান পরিবর্তন</button>
-                        <h3 style="margin: 0; text-align: center; padding-top: 4px; font-size: 17px;">পণ্য অর্ডার ফরম</h3>
+                        <h3 style="margin: 0; text-align: center; padding-top: 8px; font-size: 17px;">পণ্য অর্ডার ফরম</h3>
                     </div>
                     
                     <div class="cust-info" id="selectedShopDetailsInfo" style="background: #e9ecef; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
@@ -709,7 +715,7 @@
                         </select>
                     </div>
 
-                    <button type="button" onclick="submitCustomerOrder()" style="background-color: #007bff; margin-top: 15px;">মার্চেন্টের কাছে অর্ডার সাবমিট করুন</button>
+                    <button type="button" onclick="submitCustomerOrder()" style="background-color: #007bff; margin-top: 15px;">অর্ডার করুন</button>
                 </div>
             </div>
         </div>
@@ -1564,7 +1570,7 @@
         eyeIcon.innerHTML = `
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
           <circle cx="12" cy="12" r="3"></circle>
-          <line x1="4" y1="20" x2="20" y2="4"></line>
+          <line x1="20" y1="4" x2="4" y2="20"></line>
         `;
       }
     }
@@ -1787,7 +1793,7 @@
                     <td>${m.businessCategory || 'সাধারণ'}</td>
                     <td>${m.name}</td>
                     <td>${m.address || ''}</td>
-                    <td><button type="button" onclick="selectShopForOrder('${m.username}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">অর্ডার করুন</button></td>
+                    <td><button type="button" onclick="selectShopForOrder('${m.username}')" class="table-open-btn">অর্ডার</button></td>
                 </tr>
             `;
         });
@@ -1982,7 +1988,7 @@
         else return Math.round(grandTotal * 0.05);
     }
 
-    /* ইনভয়েস হেডার: গ্রাহকের বিবরণ বামে, মার্চেন্টের বিবরণ ডানে প্লেইন লেআউট (বর্ডারহীন) */
+    /* ইনভয়েস হেডার: গ্রাহকের বিবরণ বামে এবং সোজাসুজি ডানে মার্চেন্টের বিবরণ (বর্ডারহীন প্লেইন ফরম্যাট) */
     function renderInvoiceHeader(ord) {
         let custAddr = ord.customerAddress && ord.customerAddress !== 'ঠিকানা' ? ord.customerAddress : '';
         let shopAddr = ord.shopAddress && ord.shopAddress !== 'ঠিকানা' ? ord.shopAddress : '';
@@ -2150,7 +2156,7 @@
                     <td>#${ord.orderId}</td>
                     <td>${ord.customerName}</td>
                     <td>${ord.date}</td>
-                    <td><button type="button" onclick="openMerchantIncomingSingleOrder('${ord.orderId}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                    <td><button type="button" onclick="openMerchantIncomingSingleOrder('${ord.orderId}')" class="table-open-btn">Open</button></td>
                 </tr>
             `;
         });
@@ -2580,7 +2586,7 @@
                             <td>${latest.date}</td>
                             <td>${latest.shopName}</td>
                             <td><strong>${latest.grandTotal} টাকা</strong></td>
-                            <td><button type="button" onclick="openCustomerSingleInvoice('${latest.orderId}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                            <td><button type="button" onclick="openCustomerSingleInvoice('${latest.orderId}')" class="table-open-btn">Open</button></td>
                         </tr>
                     `;
                 });
@@ -2785,7 +2791,7 @@
                     <td>${c.mobile}</td>
                     <td><strong>${c.totalBusiness} টাকা</strong></td>
                     <td>${c.count} টি</td>
-                    <td><button type="button" onclick="openMerchantClientInvoices('${c.username}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                    <td><button type="button" onclick="openMerchantClientInvoices('${c.username}')" class="table-open-btn">Open</button></td>
                 </tr>
             `;
         }
@@ -2809,7 +2815,7 @@
                     <td><strong>${ord.invoiceNo || '01'}</strong></td>
                     <td>${ord.date}</td>
                     <td><strong>${ord.grandTotal} টাকা</strong></td>
-                    <td><button type="button" onclick="openMerchantSingleInvoice('${ord.orderId}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                    <td><button type="button" onclick="openMerchantSingleInvoice('${ord.orderId}')" class="table-open-btn">Open</button></td>
                 </tr>
             `;
         });
@@ -2894,7 +2900,7 @@
                     <td>${c.mobile}</td>
                     <td><strong>${c.totalAmount} টাকা</strong></td>
                     <td>${c.count} টি</td>
-                    <td><button type="button" onclick="openRiderClientInvoices('${c.username}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                    <td><button type="button" onclick="openRiderClientInvoices('${c.username}')" class="table-open-btn">Open</button></td>
                 </tr>
             `;
         }
@@ -2922,7 +2928,7 @@
                     <td><strong>${ord.invoiceNo || '01'}</strong></td>
                     <td>${ord.date}</td>
                     <td><strong>${ord.grandTotal} টাকা</strong></td>
-                    <td><button type="button" onclick="openRiderSingleInvoice('${ord.orderId}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                    <td><button type="button" onclick="openRiderSingleInvoice('${ord.orderId}')" class="table-open-btn">Open</button></td>
                 </tr>
             `;
         });
@@ -2991,7 +2997,7 @@
                     <td>${c.mobile}</td>
                     <td style="color: #d9534f; font-weight: bold;">${c.totalDue} টাকা</td>
                     <td>${c.invoicesCount} টি</td>
-                    <td><button type="button" onclick="openMerchantCustomerDueList('${c.username}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                    <td><button type="button" onclick="openMerchantCustomerDueList('${c.username}')" class="table-open-btn">Open</button></td>
                 </tr>
             `;
         }
@@ -3015,7 +3021,7 @@
                     <td><strong>${inv.invoiceNo || '01'}</strong></td>
                     <td>${inv.date}</td>
                     <td style="color: #d9534f; font-weight: bold;">${inv.remainingDue} টাকা</td>
-                    <td><button type="button" onclick="openMerchantSingleDueInvoice('${inv.orderId}', '${custUsername}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                    <td><button type="button" onclick="openMerchantSingleDueInvoice('${inv.orderId}', '${custUsername}')" class="table-open-btn">Open</button></td>
                 </tr>
             `;
         });
@@ -3133,7 +3139,7 @@
                     <td><strong>${g.shopName}</strong></td>
                     <td style="color: #d9534f; font-weight: bold;">${g.totalDue} টাকা</td>
                     <td>${g.count} টি</td>
-                    <td><button type="button" onclick="openCustomerMerchantDueInvoices('${g.username}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                    <td><button type="button" onclick="openCustomerMerchantDueInvoices('${g.username}')" class="table-open-btn">Open</button></td>
                 </tr>
             `;
         }
@@ -3161,7 +3167,7 @@
                     <td><strong>${inv.invoiceNo || '01'}</strong></td>
                     <td>${inv.date}</td>
                     <td style="color: #d9534f; font-weight: bold;">${inv.remainingDue} টাকা</td>
-                    <td><button type="button" onclick="openCustomerSingleDueInvoice('${inv.orderId}', '${merchantUsername}')" class="btn-blue" style="margin:0; padding:5px 10px; font-size:11.5px; width:auto;">Open</button></td>
+                    <td><button type="button" onclick="openCustomerSingleDueInvoice('${inv.orderId}', '${merchantUsername}')" class="table-open-btn">Open</button></td>
                 </tr>
             `;
         });
