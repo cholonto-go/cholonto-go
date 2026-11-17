@@ -9,8 +9,8 @@
         
         .container { width: 100%; max-width: 580px; background: #ffffff; padding: 15px 12px; border-radius: 0; box-shadow: none; box-sizing: border-box; margin-bottom: 0; min-height: 100vh; overflow-x: hidden; }
         @media (min-width: 768px) {
-            .container { padding: 25px 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin: 20px auto; min-height: auto; }
-            body { padding: 20px; }
+            .container { max-width: 800px; padding: 30px 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: 30px auto; min-height: auto; background: #fff; }
+            body { background-color: #e4e6eb; padding: 20px; }
         }
         
         h2, h3 { text-align: center; color: #333; margin-top: 0; margin-bottom: 20px; font-weight: 600; }
@@ -48,13 +48,12 @@
         .active-page { display: block; }
         .card { background: #ffffff; border: 1px solid #e1e4e8; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; width: 100%; overflow-x: auto; }
         
-        /* ইনভয়েস মেমো বক্স: কোনো বাড়তি বর্ডার ছাড়া ফুল পেজ প্লেন লেআউট */
+        /* ফুল পেজ প্লেইন ইনভয়েস লেআউট (বর্ডারহীন) */
         .memo-box { background: #fff; padding: 5px 0; margin-bottom: 15px; position: relative; width: 100%; box-sizing: border-box; overflow-x: auto; border: none; }
         
         .invoice-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; position: relative; flex-wrap: wrap; gap: 5px; }
         .invoice-no-box { display: inline-block; background: #e2f0d9; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
         
-        /* দোকানের নাম যতটুকু, আন্ডারলাইন ঠিক ততটুকুই হবে */
         .shop-name-container { text-align: center; width: 100%; margin-top: 5px; }
         @media (min-width: 480px) {
             .shop-name-container { position: absolute; left: 50%; transform: translateX(-50%); width: auto; margin-top: 0; }
@@ -63,7 +62,7 @@
         .shop-name { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 2px; display: inline-block; }
         .shop-underline { height: 2px; background: #28a745; width: 100%; margin: 0 auto; }
 
-        /* কাস্টমার বামে এবং মার্চেন্ট ডানে প্লেইন লেআউট (বর্ডারহীন) */
+        /* গ্রাহক বামে এবং মার্চেন্ট ডানে পাশাপাশি প্লেইন লেআউট */
         .invoice-grid { display: flex; gap: 15px; margin-top: 15px; margin-bottom: 10px; flex-wrap: wrap; }
         .invoice-grid-col { flex: 1; min-width: 200px; padding: 4px 0; font-size: 12px; line-height: 1.4; background: transparent; border: none; }
 
@@ -75,7 +74,6 @@
         th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12.5px; word-break: break-word; }
         th { background-color: #28a745; color: white; }
         
-        /* পণ্যের নাম এবং পরিমাণ কলাম প্রশস্ত এবং দর ও মোট কলাম স্বাভাবিক রাখা */
         th.col-item, td.col-item { width: 35%; text-align: left; padding-left: 10px; }
         th.col-qty, td.col-qty { width: 25%; }
         th.col-rate, td.col-rate { width: 20%; }
@@ -104,7 +102,7 @@
         .front-compact-back-btn { background-color: #343a40; color: #ffc107; border: none; padding: 8px 18px; font-size: 13px; font-weight: bold; border-radius: 5px; display: inline-block; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); width: auto; min-width: 90px; }
         .front-compact-back-btn:hover { background-color: #23272b; }
 
-        .dash-compact-corner-btn { background-color: #343a40; color: #ffc107; border: none; padding: 6px 14px; font-size: 12px; font-weight: bold; border-radius: 4px; display: inline-block; cursor: pointer; text-align: left; margin-bottom: 8px; width: auto; min-width: 75px; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+        .dash-compact-corner-btn { background-color: #343a40; color: #ffc107; border: none; padding: 6px 14px; font-size: 12px; font-weight: bold; border-radius: 4px; display: inline-block; cursor: pointer; text-align: left; width: auto; min-width: 75px; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
         .dash-compact-corner-btn:hover { background-color: #23272b; }
 
         #paymentModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; box-sizing: border-box; padding: 10px; }
@@ -215,6 +213,7 @@
                   <svg id="mRegEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
+                    <line x1="4" y1="20" x2="20" y2="4"></line>
                   </svg>
                 </button>
               </div>
@@ -350,6 +349,7 @@
                   <svg id="cRegEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
+                    <line x1="4" y1="20" x2="20" y2="4"></line>
                   </svg>
                 </button>
               </div>
@@ -439,6 +439,7 @@
                   <svg id="rRegEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
+                    <line x1="4" y1="20" x2="20" y2="4"></line>
                   </svg>
                 </button>
               </div>
@@ -529,6 +530,7 @@
                   <svg id="loginEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
+                    <line x1="4" y1="20" x2="20" y2="4"></line>
                   </svg>
                 </button>
               </div>
@@ -668,10 +670,10 @@
 
             <div id="customerActualOrderFormView" style="display:none;">
                 <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <button type="button" class="dash-compact-corner-btn" onclick="backToShopSelector()" style="margin:0;">← দোকান পরিবর্তন</button>
-                        <h3 style="margin:0;">পণ্য অর্ডার ফরম</h3>
-                        <div></div>
+                    <!-- দোকান পরিবর্তন বাটন ও শিরোনাম বিন্যাস (বাটন বামে, শিরোনাম ঠিক নিচে এবং মাঝ বরাবর) -->
+                    <div style="position: relative; margin-bottom: 18px; min-height: 38px;">
+                        <button type="button" class="dash-compact-corner-btn" onclick="backToShopSelector()" style="position: absolute; left: 0; top: 0; margin: 0;">← দোকান পরিবর্তন</button>
+                        <h3 style="margin: 0; text-align: center; padding-top: 4px; font-size: 17px;">পণ্য অর্ডার ফরম</h3>
                     </div>
                     
                     <div class="cust-info" id="selectedShopDetailsInfo" style="background: #e9ecef; padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
@@ -1551,15 +1553,18 @@
       
       if (passwordField.type === "password") {
         passwordField.type = "text";
-        eyeIcon.innerHTML = `
-          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-          <line x1="1" y1="1" x2="23" y2="23"></line>
-        `;
-      } else {
-        passwordField.type = "password";
+        // চোখ থেকে স্ল্যাশ/আড়াআড়ি দাগ সরে গেলে পাসওয়ার্ড দেখা যাবে
         eyeIcon.innerHTML = `
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
           <circle cx="12" cy="12" r="3"></circle>
+        `;
+      } else {
+        passwordField.type = "password";
+        // আড়াআড়ি দাগ চোখের ওপর থাকলে পাসওয়ার্ড দেখা যাবে না
+        eyeIcon.innerHTML = `
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+          <line x1="4" y1="20" x2="20" y2="4"></line>
         `;
       }
     }
@@ -1977,7 +1982,7 @@
         else return Math.round(grandTotal * 0.05);
     }
 
-    /* ইনভয়েস হেডার: গ্রাহক বামে এবং মার্চেন্ট ডানে প্লেইন লেআউট (বর্ডারহীন), দোকানের নাম অনুযায়ী ছোট আন্ডারলাইন */
+    /* ইনভয়েস হেডার: গ্রাহকের বিবরণ বামে, মার্চেন্টের বিবরণ ডানে প্লেইন লেআউট (বর্ডারহীন) */
     function renderInvoiceHeader(ord) {
         let custAddr = ord.customerAddress && ord.customerAddress !== 'ঠিকানা' ? ord.customerAddress : '';
         let shopAddr = ord.shopAddress && ord.shopAddress !== 'ঠিকানা' ? ord.shopAddress : '';
@@ -2010,7 +2015,7 @@
                     মোবাইল: ${ord.customerMobile}<br>
                     ${custAddressLine}
                 </div>
-                <div class="invoice-grid-col">
+                <div class="invoice-grid-col" style="text-align: right;">
                     <strong>মার্চেন্টের বিবরণ:</strong><br>
                     মার্চেন্ট আইডি: ${ord.merchantUniqueId || '000001'}<br>
                     প্রোপাইটর: ${ord.shopOwner}<br>
@@ -2631,7 +2636,7 @@
                 let codList = JSON.parse(localStorage.getItem('cg_cod_invoices') || '[]');
                 codList.unshift(ordObj);
                 saveCodHybrid(codList);
-                addNotification(ordObj.targetMerchantUsername, `কাস্টমার (${ordObj.customerName}) পণ্য বুঝে পেয়েছে। রাইডার (${ordObj.riderName}) থেকে ক্যাশ অন ডেলিভারির টাকা বুঝে নিয়ে রিসিভ করুন${invNoText}।`);
+                addNotification(ordObj.targetMerchantUsername, `কাস্টমার (${ordObj.customerName}) পণ্য বুঝে পেয়েছে। রাইডার (${ordObj.riderName}) থেকে ক্যাশ অন ডেলিভারির টাকা বুঝে নিয়ে রিসিভ করুন${invNoText}।`);
             } else if(ordObj.paymentMethod.includes('বাকি অর্ডার')) {
                 ordObj.status = 'moved_to_due';
                 ordObj.originalDue = ordObj.grandTotal;
