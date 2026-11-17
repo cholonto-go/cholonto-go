@@ -48,13 +48,13 @@
         .active-page { display: block; }
         .card { background: #ffffff; border: 1px solid #e1e4e8; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; width: 100%; overflow-x: auto; }
         
-        /* ইনভয়েস বা মেমো বক্স: কোনো অতিরিক্ত ছোট বর্ডার ছাড়া সম্পূর্ণ পরিষ্কার লেআউট */
+        /* ইনভয়েস মেমো বক্স: কোনো বাড়তি বর্ডার ছাড়া ফুল পেজ প্লেন লেআউট */
         .memo-box { background: #fff; padding: 5px 0; margin-bottom: 15px; position: relative; width: 100%; box-sizing: border-box; overflow-x: auto; border: none; }
         
         .invoice-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; position: relative; flex-wrap: wrap; gap: 5px; }
         .invoice-no-box { display: inline-block; background: #e2f0d9; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
         
-        /* দোকানের নাম যতটুকু, আন্ডারলাইন ঠিক ততটুকুই হবে (ইনলাইন ব্লক) */
+        /* দোকানের নাম যতটুকু, আন্ডারলাইন ঠিক ততটুকুই হবে */
         .shop-name-container { text-align: center; width: 100%; margin-top: 5px; }
         @media (min-width: 480px) {
             .shop-name-container { position: absolute; left: 50%; transform: translateX(-50%); width: auto; margin-top: 0; }
@@ -63,9 +63,9 @@
         .shop-name { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 2px; display: inline-block; }
         .shop-underline { height: 2px; background: #28a745; width: 100%; margin: 0 auto; }
 
-        /* কাস্টমার বামে এবং মার্চেন্ট ডানে পাশাপাশি গ্রিড */
+        /* কাস্টমার বামে এবং মার্চেন্ট ডানে প্লেইন লেআউট (বর্ডারহীন) */
         .invoice-grid { display: flex; gap: 15px; margin-top: 15px; margin-bottom: 10px; flex-wrap: wrap; }
-        .invoice-grid-col { flex: 1; min-width: 200px; padding: 8px; font-size: 12px; line-height: 1.4; background: #f9f9f9; border-radius: 4px; box-sizing: border-box; }
+        .invoice-grid-col { flex: 1; min-width: 200px; padding: 4px 0; font-size: 12px; line-height: 1.4; background: transparent; border: none; }
 
         .order-date-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: #555; margin-bottom: 8px; flex-wrap: wrap; gap: 5px; }
         .payment-middle-display { text-align: center; font-size: 12px; font-weight: bold; color: #333; margin: 8px 0; background: #f1f1f1; padding: 5px; border-radius: 4px; }
@@ -74,6 +74,13 @@
         table { width: 100%; border-collapse: collapse; min-width: 320px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12.5px; word-break: break-word; }
         th { background-color: #28a745; color: white; }
+        
+        /* পণ্যের নাম এবং পরিমাণ কলাম প্রশস্ত এবং দর ও মোট কলাম স্বাভাবিক রাখা */
+        th.col-item, td.col-item { width: 35%; text-align: left; padding-left: 10px; }
+        th.col-qty, td.col-qty { width: 25%; }
+        th.col-rate, td.col-rate { width: 20%; }
+        th.col-total, td.col-total { width: 20%; }
+
         .input-box { width: 100%; padding: 6px !important; text-align: center; border: 1px solid #bbb; border-radius: 4px; box-sizing: border-box; font-size: 12.5px; }
         
         .table-total-row { background: #fff9e6; font-weight: bold; text-align: right; }
@@ -675,8 +682,8 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="width: 45%;">পণ্যের নাম</th>
-                                    <th style="width: 45%;">পরিমাণ ও একক</th>
+                                    <th class="col-item">পণ্যের নাম</th>
+                                    <th class="col-qty">পরিমাণ ও একক</th>
                                     <th style="width: 10%;">কাটুন</th>
                                 </tr>
                             </thead>
@@ -1970,7 +1977,7 @@
         else return Math.round(grandTotal * 0.05);
     }
 
-    // ইনভয়েস হেডার: গ্রাহক বামে এবং মার্চেন্ট ডানে পাশাপাশি, দোকানের নাম অনুযায়ী ছোট আন্ডারলাইন
+    /* ইনভয়েস হেডার: গ্রাহক বামে এবং মার্চেন্ট ডানে প্লেইন লেআউট (বর্ডারহীন), দোকানের নাম অনুযায়ী ছোট আন্ডারলাইন */
     function renderInvoiceHeader(ord) {
         let custAddr = ord.customerAddress && ord.customerAddress !== 'ঠিকানা' ? ord.customerAddress : '';
         let shopAddr = ord.shopAddress && ord.shopAddress !== 'ঠিকানা' ? ord.shopAddress : '';
@@ -2070,14 +2077,14 @@
             if(isInputTable) {
                 itemRows += `
                     <tr>
-                        <td>${it.name}</td>
-                        <td>${it.qtyStr}</td>
-                        <td><input type="number" step="any" class="input-box merchant-rate" data-ord="${ord.ordIdx}" data-item="${itIdx}" value="${it.rate || ''}" placeholder="দর" oninput="calculateMerchantRow(${ord.ordIdx}, ${itIdx})"></td>
-                        <td><input type="number" step="any" class="input-box merchant-total" data-ord="${ord.ordIdx}" data-item="${itIdx}" value="${it.total || ''}" placeholder="মোট" oninput="calculateMerchantGrandTotal(${ord.ordIdx})"></td>
+                        <td class="col-item">${it.name}</td>
+                        <td class="col-qty">${it.qtyStr}</td>
+                        <td class="col-rate"><input type="number" step="any" class="input-box merchant-rate" data-ord="${ord.ordIdx}" data-item="${itIdx}" value="${it.rate || ''}" placeholder="দর" oninput="calculateMerchantRow(${ord.ordIdx}, ${itIdx})"></td>
+                        <td class="col-total"><input type="number" step="any" class="input-box merchant-total" data-ord="${ord.ordIdx}" data-item="${itIdx}" value="${it.total || ''}" placeholder="মোট" oninput="calculateMerchantGrandTotal(${ord.ordIdx})"></td>
                     </tr>
                 `;
             } else {
-                itemRows += `<tr><td>${it.name}</td><td>${it.qtyStr}</td><td>${it.rate} টাকা</td><td>${it.total} টাকা</td></tr>`;
+                itemRows += `<tr><td class="col-item">${it.name}</td><td class="col-qty">${it.qtyStr}</td><td class="col-rate">${it.rate} টাকা</td><td class="col-total">${it.total} টাকা</td></tr>`;
             }
         });
 
@@ -2096,7 +2103,14 @@
         return `
             <div class="table-responsive">
                 <table>
-                    <thead><tr><th>পণ্যের নাম</th><th>পরিমাণ</th><th>${isInputTable ? 'প্রতি দর' : 'দর'}</th><th>${isInputTable ? 'মোট দর' : 'মোট'}</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th class="col-item">পণ্যের নাম</th>
+                            <th class="col-qty">পরিমাণ</th>
+                            <th class="col-rate">${isInputTable ? 'প্রতি দর' : 'দর'}</th>
+                            <th class="col-total">${isInputTable ? 'মোট দর' : 'মোট'}</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         ${itemRows}
                         ${totalRowHtml}
@@ -2517,7 +2531,7 @@
         saveOrdersHybrid(allOrders);
 
         let invNoText = ordObj.invoiceNo ? ` (ইনভয়েস নং: ${ordObj.invoiceNo})` : '';
-        addNotification(ordObj.customerUsername, `রাইডার (${ordObj.riderName}) আপনার ঠিকানায় পৌঁছেছে। পণ্য বুঝে নিয়ে কনফার্ম করুন${invNoText}, অর্ডার #${ordObj.orderId}`);
+        addNotification(ordObj.customerUsername, `রাইডার (${ordObj.riderName}) আপনার ঠিকানায় পৌঁছেছে। পণ্য বুঝে নিয়ে কনফার্ম করুন${invNoText}, অর্ডার #${ordObj.orderId}`);
         addNotification(ordObj.targetMerchantUsername, `রাইডার (${ordObj.riderName}) গ্রাহকের কাছে পার্সেল পৌঁছে দিয়েছে এবং হস্তান্তরের জন্য অপেক্ষা করছে${invNoText}`);
 
         alert('গ্রাহকের কাছে ডেলিভারি কনফার্মেশনের জন্য পাঠানো হয়েছে!');
