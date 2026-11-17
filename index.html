@@ -7,7 +7,6 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; box-sizing: border-box; width: 100%; overflow-x: hidden; }
         
-        /* মোবাইলে ফুল স্ক্রিন / ফুল উইথ এবং ডেস্কটপে মার্জিত কার্ড সেটআপ */
         .container { width: 100%; max-width: 580px; background: #ffffff; padding: 15px 12px; border-radius: 0; box-shadow: none; box-sizing: border-box; margin-bottom: 0; min-height: 100vh; overflow-x: hidden; }
         @media (min-width: 768px) {
             .container { padding: 25px 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin: 20px auto; min-height: auto; }
@@ -49,24 +48,28 @@
         .active-page { display: block; }
         .card { background: #ffffff; border: 1px solid #e1e4e8; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; width: 100%; overflow-x: auto; }
         
-        .memo-box { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 6px; margin-bottom: 15px; position: relative; width: 100%; box-sizing: border-box; overflow-x: auto; }
+        /* ইনভয়েস বা মেমো বক্স: কোনো অতিরিক্ত ছোট বর্ডার ছাড়া সম্পূর্ণ পরিষ্কার লেআউট */
+        .memo-box { background: #fff; padding: 5px 0; margin-bottom: 15px; position: relative; width: 100%; box-sizing: border-box; overflow-x: auto; border: none; }
         
         .invoice-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; position: relative; flex-wrap: wrap; gap: 5px; }
         .invoice-no-box { display: inline-block; background: #e2f0d9; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        
+        /* দোকানের নাম যতটুকু, আন্ডারলাইন ঠিক ততটুকুই হবে (ইনলাইন ব্লক) */
         .shop-name-container { text-align: center; width: 100%; margin-top: 5px; }
         @media (min-width: 480px) {
             .shop-name-container { position: absolute; left: 50%; transform: translateX(-50%); width: auto; margin-top: 0; }
         }
-        .shop-name { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 2px; }
-        .shop-underline { width: 100%; height: 2px; background: #28a745; margin: 0 auto; }
+        .shop-name-box { display: inline-block; text-align: center; }
+        .shop-name { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 2px; display: inline-block; }
+        .shop-underline { height: 2px; background: #28a745; width: 100%; margin: 0 auto; }
 
+        /* কাস্টমার বামে এবং মার্চেন্ট ডানে পাশাপাশি গ্রিড */
         .invoice-grid { display: flex; gap: 15px; margin-top: 15px; margin-bottom: 10px; flex-wrap: wrap; }
         .invoice-grid-col { flex: 1; min-width: 200px; padding: 8px; font-size: 12px; line-height: 1.4; background: #f9f9f9; border-radius: 4px; box-sizing: border-box; }
 
         .order-date-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: #555; margin-bottom: 8px; flex-wrap: wrap; gap: 5px; }
         .payment-middle-display { text-align: center; font-size: 12px; font-weight: bold; color: #333; margin: 8px 0; background: #f1f1f1; padding: 5px; border-radius: 4px; }
 
-        /* টেবিল ওভারফ্লো ফিক্স করার জন্য স্টাইল */
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 8px; }
         table { width: 100%; border-collapse: collapse; min-width: 320px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12.5px; word-break: break-word; }
@@ -267,7 +270,6 @@
                 <input type="text" id="mTradeLicense" required placeholder="ট্রেড লাইসেন্স নাম্বার">
             </div>
 
-            <!-- অ্যাড্রেস সেকশন -->
             <div class="address-group">
               <div class="row-fields">
                   <div>
@@ -1033,7 +1035,6 @@
         return String(str).trim().replace(/[.#$[\]/]/g, "-");
     }
 
-    // শুধুমাত্র ইংরেজি লেটার এবং নম্বর নেওয়ার ফাংশন (বাংলা সম্পূর্ণ নিষিদ্ধ)
     window.validateStrictEnglishInput = function(inputEl) {
         inputEl.value = inputEl.value.replace(/[^a-zA-Z0-9]/g, '');
     };
@@ -1206,7 +1207,6 @@
       }
     }
 
-    // স্মার্ট লোকেশন সিস্টেম (স্পেসিফিক "city corporation" বা "সিটি কর্পোরেশন" চেক করবে)
     function initSmartLocationSystem(formType, divInputId, divListId, distInputId, distListId, subDistInputId, subDistListId) {
         const divEl = document.getElementById(divInputId);
         const distEl = document.getElementById(distInputId);
@@ -1970,6 +1970,7 @@
         else return Math.round(grandTotal * 0.05);
     }
 
+    // ইনভয়েস হেডার: গ্রাহক বামে এবং মার্চেন্ট ডানে পাশাপাশি, দোকানের নাম অনুযায়ী ছোট আন্ডারলাইন
     function renderInvoiceHeader(ord) {
         let custAddr = ord.customerAddress && ord.customerAddress !== 'ঠিকানা' ? ord.customerAddress : '';
         let shopAddr = ord.shopAddress && ord.shopAddress !== 'ঠিকানা' ? ord.shopAddress : '';
@@ -1987,8 +1988,10 @@
             <div class="invoice-header-top">
                 <span class="invoice-no-box">ইনভয়েস নং: ${ord.invoiceNo || '01'}</span>
                 <div class="shop-name-container">
-                    <div class="shop-name">${ord.shopName}</div>
-                    <div class="shop-underline"></div>
+                    <div class="shop-name-box">
+                        <div class="shop-name">${ord.shopName}</div>
+                        <div class="shop-underline"></div>
+                    </div>
                 </div>
             </div>
 
@@ -2533,7 +2536,7 @@
         let confirmHtml = '';
         waitingConfirm.forEach(ord => {
             confirmHtml += `
-                <div class="memo-box" style="border: 2px solid #28a745;">
+                <div class="memo-box" style="border: 2px solid #28a745; padding: 10px;">
                     <div style="background: #fff3cd; padding: 8px; border-radius: 4px; margin-bottom: 8px; font-weight: bold; color: #856404; text-align: center;">
                         রাইডার (${ord.riderName || 'রাইডার'}) আপনার কাছে পণ্য নিয়ে এসেছে।
                     </div>
@@ -2578,7 +2581,7 @@
 
         let singleHtml = `
             <button type="button" class="dash-compact-corner-btn" onclick="loadCustomerPortalData()">← Back</button>
-            <div id="printableInvoiceArea" class="memo-box" style="border: 1px solid #ddd; padding: 15px; margin-top: 8px;">
+            <div id="printableInvoiceArea" class="memo-box" style="padding: 5px 0; margin-top: 8px;">
                 ${renderInvoiceHeader(ord)}
                 ${renderInvoiceTableWithEmbeddedTotal(ord, false)}
                 ${renderPaymentHistoryHtml(ord)}
@@ -2805,7 +2808,7 @@
         if(!ord) return;
 
         container.innerHTML = `
-            <div id="printableMerchantInvoice" class="memo-box" style="border: 1px solid #ddd; padding: 15px; margin-top: 8px;">
+            <div id="printableMerchantInvoice" class="memo-box" style="padding: 5px 0; margin-top: 8px;">
                 ${renderInvoiceHeader(ord)}
                 ${renderInvoiceTableWithEmbeddedTotal(ord, false)}
                 ${renderPaymentHistoryHtml(ord)}
@@ -2916,7 +2919,7 @@
 
         detailView.innerHTML = `
             <button type="button" class="dash-compact-corner-btn" onclick="openRiderClientInvoices('${ord.customerUsername}')">← Back</button>
-            <div class="memo-box" style="border: 1px solid #ddd; padding: 15px; margin-top: 8px;">
+            <div class="memo-box" style="padding: 5px 0; margin-top: 8px;">
                 ${renderInvoiceHeader(ord)}
                 ${renderInvoiceTableWithEmbeddedTotal(ord, false)}
                 ${renderPaymentHistoryHtml(ord)}
@@ -3018,7 +3021,7 @@
                     </div>
                 </div>
             </div>
-            <div class="memo-box" style="border: 1px solid #ddd; padding: 15px; margin-top: 8px;">
+            <div class="memo-box" style="padding: 5px 0; margin-top: 8px;">
                 ${renderInvoiceHeader(inv)}
                 ${renderInvoiceTableWithEmbeddedTotal(inv, false)}
                 <div style="margin-top:6px; color: #d9534f; font-weight: bold; text-align: right;">বকেয়া: ${inv.remainingDue} টাকা</div>
@@ -3155,7 +3158,7 @@
 
         detailView.innerHTML = `
             <button type="button" class="dash-compact-corner-btn" onclick="openCustomerMerchantDueInvoices('${merchantUsername}')">← Back</button>
-            <div class="memo-box" style="border: 1px solid #ddd; padding: 15px; margin-top: 8px;">
+            <div class="memo-box" style="padding: 5px 0; margin-top: 8px;">
                 ${renderInvoiceHeader(inv)}
                 ${renderInvoiceTableWithEmbeddedTotal(inv, false)}
                 <div style="margin-top:6px; color: #d9534f; font-weight: bold; text-align: right;">বকেয়া: ${inv.remainingDue} টাকা</div>
