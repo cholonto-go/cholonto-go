@@ -112,7 +112,7 @@
         .shop-underline { height: 2px; background: #28a745; width: 100%; margin: 0 auto; }
 
                /* আগের মতো সুন্দর ও গোছানো কাস্টমার ও মার্চেন্ট লেআউট */
-        .invoice-grid { 
+                .invoice-grid { 
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start; 
@@ -134,10 +134,20 @@
         }
         .invoice-grid-col.customer-col { 
             text-align: left; 
+            flex: 1;
         }
         .invoice-grid-col.merchant-col { 
+            text-align: right; /* পুরো কলামটি ডান পাশে ঠেলে দেবে */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* কলামের কন্টেন্ট ডান প্রান্তে রাখবে কিন্তু ভেতরের লেখা গুছিয়ে রাখবে */
+        }
+        /* মার্চেন্টের ভেতরের লেখাগুলো বাম দিক সোজাসুজি রেখে পুরো ব্লকটি ডান পাশ কভার করবে */
+        .invoice-grid-col.merchant-col > div, 
+        .invoice-grid-col.merchant-col span {
             text-align: left; 
         }
+
 
         }
         .invoice-grid-col.customer-col { text-align: left; }
