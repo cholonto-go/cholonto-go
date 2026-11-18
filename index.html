@@ -111,7 +111,7 @@
         .shop-name { font-size: 16.5px; font-weight: bold; color: #222; margin-bottom: 2px; display: inline-block; }
         .shop-underline { height: 2px; background: #28a745; width: 100%; margin: 0 auto; }
 
-       /* গ্রাহক বামে এবং মার্চেন্ট ডানে সমান উচ্চতায় সুবিন্যস্ত লেআউট */
+               /* আগের মতো সুন্দর ও গোছানো কাস্টমার ও মার্চেন্ট লেআউট */
         .invoice-grid { 
             display: flex; 
             justify-content: space-between; 
@@ -121,11 +121,9 @@
             margin-bottom: 12px; 
             width: 100%;
             box-sizing: border-box;
-            flex-wrap: wrap;
         }
         .invoice-grid-col { 
-            flex: 1 1 200px; 
-            min-width: 0; 
+            flex: 1; 
             padding: 0; 
             font-size: 12.5px; 
             line-height: 1.55; 
@@ -133,21 +131,14 @@
             border: none; 
             color: #222;
             box-sizing: border-box;
-            word-break: break-word; 
-            overflow-wrap: break-word;
         }
-        .invoice-grid-col.customer-col { text-align: left; }
+        .invoice-grid-col.customer-col { 
+            text-align: left; 
+        }
         .invoice-grid-col.merchant-col { 
             text-align: left; 
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end; 
         }
-        .invoice-grid-col.merchant-col > div {
-            text-align: left; /* ভেতরের প্রতিটি লাইনের লেখা বাম দিক থেকে সোজাসুজি শুরু হবে */
-            width: fit-content; /* লেখা ছোট হলে ছোট জায়গা নেবে, লম্বা হলে পেজের সীমানা পর্যন্ত বাড়বে */
-            max-width: 100%; /* কোনো অবস্থাতেই পেজের বাইরে যাবে না */
-        }
+
         }
         .invoice-grid-col.customer-col { text-align: left; }
         .invoice-grid-col.merchant-col { text-align: left; }
