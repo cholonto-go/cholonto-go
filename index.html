@@ -111,8 +111,8 @@
         .shop-name { font-size: 16.5px; font-weight: bold; color: #222; margin-bottom: 2px; display: inline-block; }
         .shop-underline { height: 2px; background: #28a745; width: 100%; margin: 0 auto; }
 
-               /* আগের মতো সুন্দর ও গোছানো কাস্টমার ও মার্চেন্ট লেআউট */
-                .invoice-grid { 
+         /* আগের মতো সুন্দর ও গোছানো কাস্টমার ও মার্চেন্ট লেআউট */
+           .invoice-grid { 
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start; 
@@ -136,20 +136,21 @@
             text-align: left; 
             flex: 1;
         }
-           .invoice-grid-col.merchant-col { 
-            text-align: right; 
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end; 
-        }
-        
-        /* মার্চেন্টের ভেতরের ইনফরমেশনগুলোর জন্য একটি নির্দিষ্ট গ্রুপ বা কন্টেইনার */
-        .merchant-content-box {
-            display: inline-block;
-            text-align: left; /* ভেতরের সব লাইন বাম দিকে সোজাসুজি থাকবে */
-            width: fit-content; /* সবচেয়ে লম্বা লাইন অনুযায়ী ডান পাশ কভার করবে */
-            max-width: 100%;
-        }
+        /* ১. পুরো ডান পাশের কলামটি ডান প্রান্তে সেট করার জন্য */
+     .invoice-grid-col.merchant-col { 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; 
+}
+
+/* ২. ভেতরের লেখাগুলোর মূল বক্সটি, যা সবচেয়ে লম্বা লাইন অনুযায়ী ডান পাশ ঠিক করবে */
+.merchant-content-box {
+    display: inline-block;
+    text-align: left; /* ভেতরের সব লাইন বাম দিকে সোজাসুজি শুরু হবে */
+    width: fit-content; /* সবচেয়ে লম্বা লাইনটির মাপ নেবে */
+    max-width: 100%;
+}
+
         }
         .invoice-grid-col.customer-col { text-align: left; }
         .invoice-grid-col.merchant-col { text-align: left; }
