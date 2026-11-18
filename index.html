@@ -136,16 +136,18 @@
             text-align: left; 
             flex: 1;
         }
-        .invoice-grid-col.merchant-col { 
-            text-align: right; /* পুরো কলামটি ডান পাশে ঠেলে দেবে */
+                .invoice-grid-col.merchant-col { 
+            text-align: left !important; /* ভেতরের সব লাইন বাম দিক থেকে একদম সোজাসুজি শুরু হবে */
             display: flex;
             flex-direction: column;
-            align-items: flex-end; /* কলামের কন্টেন্ট ডান প্রান্তে রাখবে কিন্তু ভেতরের লেখা গুছিয়ে রাখবে */
+            align-items: flex-end; /* পুরো বক্সটি পেজের ডান প্রান্তে থাকবে */
         }
-        /* মার্চেন্টের ভেতরের লেখাগুলো বাম দিক সোজাসুজি রেখে পুরো ব্লকটি ডান পাশ কভার করবে */
-        .invoice-grid-col.merchant-col > div, 
+        
+        .invoice-grid-col.merchant-col > div,
+        .invoice-grid-col.merchant-col p,
         .invoice-grid-col.merchant-col span {
-            text-align: left; 
+            text-align: left; /* বাম পাশ একদম সোজা রাখবে */
+            width: 100%;    /* পুরো ব্লকের ভেতর লেখাগুলো স্বাভাবিক নিয়মে থাকবে */
         }
 
 
