@@ -138,10 +138,15 @@
         }
         .invoice-grid-col.customer-col { text-align: left; }
         .invoice-grid-col.merchant-col { 
-            text-align: left; /* ভেতরের লেখাগুলো বাম দিক থেকে শুরু হয়ে সমান থাকবে */
+            text-align: left; 
             display: flex;
             flex-direction: column;
-            align-items: flex-end; /* পুরো কলামটি পেজের একদম ডান প্রান্তে সেঁটে থাকবে */
+            align-items: flex-end; 
+        }
+        .invoice-grid-col.merchant-col > div {
+            text-align: left; /* ভেতরের প্রতিটি লাইনের লেখা বাম দিক থেকে সোজাসুজি শুরু হবে */
+            width: fit-content; /* লেখা ছোট হলে ছোট জায়গা নেবে, লম্বা হলে পেজের সীমানা পর্যন্ত বাড়বে */
+            max-width: 100%; /* কোনো অবস্থাতেই পেজের বাইরে যাবে না */
         }
         }
         .invoice-grid-col.customer-col { text-align: left; }
