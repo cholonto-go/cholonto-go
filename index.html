@@ -145,7 +145,7 @@
 
 /* ২. ভেতরের লেখাগুলোর মূল বক্সটি, যা সবচেয়ে লম্বা লাইন অনুযায়ী ডান পাশ ঠিক করবে */
 .merchant-content-box {
-    display: inline-block;
+    display:block;
     text-align: left; /* ভেতরের সব লাইন বাম দিকে সোজাসুজি শুরু হবে */
     width: fit-content; /* সবচেয়ে লম্বা লাইনটির মাপ নেবে */
     max-width: 100%;
@@ -2181,7 +2181,7 @@
                  </div>
             </div>
 
-            <div class="order-date-row">
+            <div class="order-date-row" style="width: 100%;">
                 <span>অর্ডার নং: #${ord.orderId}</span>
                 <span>তারিখ: ${ord.date}</span>
             </div>
