@@ -152,10 +152,7 @@
 }
 
         }
-        .invoice-grid-col.customer-col { text-align: left; }
-        .invoice-grid-col.merchant-col { text-align: left; }
-
-        .order-date-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: #444; margin-bottom: 8px; gap: 5px; }
+               .order-date-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: #444; margin-bottom: 8px; gap: 5px; }
         .payment-middle-display { text-align: center; font-size: 12.5px; font-weight: bold; color: #333; margin: 8px 0; background: #f4f5f7; padding: 6px; border-radius: 4px; }
 
         /* ড্যাশবোর্ড সাব-হেডিং এক লাইনে সুবিন্যস্ত রাখা */
@@ -2173,13 +2170,15 @@
                     ${custAddressLine}
                 </div>
                 <div class="invoice-grid-col merchant-col">
+                <div class="merchant-content-box">।
                     <div style="font-weight:bold; margin-bottom:2px;">মার্চেন্টের বিবরণ:</div>
                     <div>মার্চেন্ট আইডি: ${ord.merchantUniqueId || '000001'}</div>
                     <div>প্রোপাইটর: ${ord.shopOwner}</div>
                     <div>মোবাইল: ${ord.shopMobile}</div>
                     ${shopAddressLine}
+                </div>     
                     ${merchantPaymentHtml}
-                </div>
+                 </div>
             </div>
 
             <div class="order-date-row">
