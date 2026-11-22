@@ -75,6 +75,28 @@
         table { width: 100%; border-collapse: collapse; min-width: 320px; border: none; }
         th, td { border: none; border-bottom: 1px solid #eee; padding: 8px; text-align: center; font-size: 12.5px; word-break: break-word; }
         th { background-color: #28a745; color: white; border: none; }
+
+        /* ক্রেতা ড্যাশবোর্ডের দোকান নির্বাচন ছক (Row & Column বর্ডারসহ) */
+        .shop-grid-table { width: 100%; border-collapse: collapse; border: 1px solid #cfd4da; table-layout: fixed; min-width: 560px; }
+        .shop-grid-table th, .shop-grid-table td { border: 1px solid #cfd4da; padding: 8px 6px; text-align: center; font-size: 12px; vertical-align: middle; word-break: normal; overflow-wrap: normal; }
+        .shop-grid-table th { background-color: #28a745; color: #ffffff; font-weight: 600; }
+        .shop-grid-table tbody tr:nth-child(even) { background-color: #f8f9fa; }
+
+        /* ঠিকানা কলাম স্বাভাবিক প্রস্থে থাকবে এবং ভেতরের লেখা ডানে-বামে স্লাইড/স্ক্রল করা যাবে */
+        .shop-address-cell { padding: 0 !important; }
+        .shop-address-scroll {
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            padding: 8px 6px;
+            text-align: left;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+            scrollbar-width: thin;
+        }
+        .shop-address-scroll::-webkit-scrollbar { height: 4px; }
+        .shop-address-scroll::-webkit-scrollbar-thumb { background: #adb5bd; border-radius: 4px; }
         
         th.col-item, td.col-item { width: 35%; text-align: left; padding-left: 10px; }
         th.col-qty, td.col-qty { width: 25%; }
@@ -1099,6 +1121,7 @@
         if(list) list.innerHTML = '';
         if(filterList) filterList.innerHTML = '<option value="">সকল ক্যাটাগরি</option>';
 
+        let addedCats = new Set();
         if (data) {
           Object.keys(data).forEach(cat => {
             if(list) {
@@ -1106,13 +1129,29 @@
                 option.value = cat;
                 list.appendChild(option);
             }
-            if(filterList) {
+            if(filterList && !addedCats.has(cat.toLowerCase())) {
+                addedCats.add(cat.toLowerCase());
                 const fOpt = document.createElement('option');
                 fOpt.value = cat;
                 fOpt.innerText = cat;
                 filterList.appendChild(fOpt);
             }
           });
+        }
+
+        let users = [];
+        try { users = JSON.parse(localStorage.getItem('cg_all_users') || '[]'); } catch(e) {}
+        if(filterList) {
+            users.filter(u => u.role === 'merchant' && u.businessCategory).forEach(m => {
+                let cName = m.businessCategory.trim();
+                if(cName && !addedCats.has(cName.toLowerCase())) {
+                    addedCats.add(cName.toLowerCase());
+                    const fOpt = document.createElement('option');
+                    fOpt.value = cName;
+                    fOpt.innerText = cName;
+                    filterList.appendChild(fOpt);
+                }
+            });
         }
       } catch (err) {
         console.error("ডাটা লোড করতে সমস্যা হয়েছে:", err);
@@ -1494,6 +1533,7 @@
             document.getElementById('custUserBadgeLine').innerText = `ইউজারনেম: ${uName}`;
             document.getElementById('custNameBadgeLine').innerText = `নাম: ${fullName}`;
             showPage('customerDashboardPage');
+            loadCategories();
             loadAvailableShopsForCustomer();
             loadCustomerQuotations();
             loadCustomerPortalData();
@@ -1763,6 +1803,20 @@
             matchedMerchants = merchants;
         }
 
+        const filterList = document.getElementById('custShopCategoryFilter');
+        if(filterList) {
+            let existingVals = new Set(Array.from(filterList.options).map(o => o.value.toLowerCase()));
+            matchedMerchants.forEach(m => {
+                if(m.businessCategory && !existingVals.has(m.businessCategory.trim().toLowerCase())) {
+                    existingVals.add(m.businessCategory.trim().toLowerCase());
+                    const opt = document.createElement('option');
+                    opt.value = m.businessCategory.trim();
+                    opt.innerText = m.businessCategory.trim();
+                    filterList.appendChild(opt);
+                }
+            });
+        }
+
         window._allAvailableMerchantsForCustomer = matchedMerchants;
         renderFilteredShopsList(matchedMerchants);
     }
@@ -1785,14 +1839,31 @@
             return;
         }
 
-        let html = '<div class="table-responsive"><table style="margin-top:6px;"><thead><tr><th>দোকানের নাম</th><th>ক্যাটাগরি</th><th>মালিক</th><th>ঠিকানা</th><th>সিলেক্ট</th></tr></thead><tbody>';
+        let html = `
+            <div class="table-responsive">
+                <table class="shop-grid-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 17%;">দোকানের নাম</th>
+                            <th style="width: 15%;">ক্যাটাগরি</th>
+                            <th style="width: 16%;">মালিক</th>
+                            <th style="width: 16%;">ইউজার নেম</th>
+                            <th style="width: 24%;">ঠিকানা</th>
+                            <th style="width: 12%;">অর্ডার</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
         merchants.forEach(m => {
             html += `
                 <tr>
                     <td><strong>${m.shop || 'দোকান'}</strong></td>
                     <td>${m.businessCategory || 'সাধারণ'}</td>
-                    <td>${m.name}</td>
-                    <td>${m.address || ''}</td>
+                    <td>${m.name || ''}</td>
+                    <td>${m.username || ''}</td>
+                    <td class="shop-address-cell">
+                        <div class="shop-address-scroll" title="${m.address || ''}">${m.address || ''}</div>
+                    </td>
                     <td><button type="button" onclick="selectShopForOrder('${m.username}')" class="table-open-btn">অর্ডার</button></td>
                 </tr>
             `;
@@ -1816,6 +1887,7 @@
                 <strong>নির্বাচিত দোকান:</strong> ${activeMerchantShop.shop || 'দোকান'}<br>
                 <strong>মার্চেন্ট আইডি:</strong> ${activeMerchantShop.uniqueId || '000001'}<br>
                 <strong>প্রোপাইটর:</strong> ${activeMerchantShop.name || 'মালিক'}<br>
+                <strong>ইউজার নেম:</strong> ${activeMerchantShop.username || ''}<br>
                 <strong>মোবাইল:</strong> ${activeMerchantShop.mobile || ''}<br>
                 <strong>ঠিকানা:</strong> ${activeMerchantShop.address || ''}
             `;
@@ -3364,6 +3436,7 @@
         if(tabId === 'custOrderNowTab') {
             document.getElementById('customerActualOrderFormView').style.display = 'none';
             document.getElementById('customerShopSelectorView').style.display = 'block';
+            loadCategories();
             loadAvailableShopsForCustomer();
         }
         if(tabId === 'custQuotationTab') loadCustomerQuotations();
