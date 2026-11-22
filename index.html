@@ -33,6 +33,17 @@
         input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="tel"]:focus, select:focus, textarea:focus {
             border-color: #28a745; outline: none; box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.15);
         }
+
+        /* নম্বর ইনপুটের ডিফল্ট আপ-ডাউন স্পিনার তীর বন্ধ করা */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
         
         button { width: 100%; background-color: #28a745; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; margin-top: 10px; font-weight: 600; transition: background-color 0.2s; }
         button:hover { background-color: #218838; }
@@ -48,7 +59,7 @@
         .active-page { display: block; }
         .card { background: #ffffff; border: none; padding: 15px 0; border-radius: 0; margin-bottom: 15px; box-sizing: border-box; width: 100%; overflow-x: auto; box-shadow: none; }
         
-        /* ফুল পেজ প্লেইন ইনভয়েস ও ফর্ম লেআউট (বর্ডারহীন) */
+        /* ফুল পেজ প্লেইন ইনভয়েস ও ফর্ম লেআউট */
         .memo-box { background: #fff; padding: 5px 0; margin-bottom: 15px; position: relative; width: 100%; box-sizing: border-box; overflow-x: auto; border: none; box-shadow: none; }
         
         .invoice-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; position: relative; flex-wrap: wrap; gap: 5px; }
@@ -72,11 +83,48 @@
         .payment-middle-display { text-align: center; font-size: 12px; font-weight: bold; color: #333; margin: 8px 0; background: #f1f1f1; padding: 5px; border-radius: 4px; }
 
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 8px; }
-        table { width: 100%; border-collapse: collapse; min-width: 320px; border: none; }
-        th, td { border: none; border-bottom: 1px solid #eee; padding: 8px; text-align: center; font-size: 12.5px; word-break: break-word; }
-        th { background-color: #28a745; color: white; border: none; }
 
-        /* ক্রেতা ড্যাশবোর্ডের দোকান নির্বাচন ছক (Row & Column বর্ডারসহ) */
+        /* সব সাধারণ ও তালিকা টেবিলে পরিষ্কার রো ও কলাম বর্ডার */
+        table { width: 100%; border-collapse: collapse; min-width: 320px; border: 1px solid #cfd4da; }
+        th, td { border: 1px solid #cfd4da; padding: 7px 6px; text-align: center; font-size: 12.5px; word-break: break-word; vertical-align: middle; }
+        th { background-color: #28a745; color: white; border: 1px solid #23923d; font-weight: 600; }
+        tbody tr:nth-child(even) { background-color: #fafbfc; }
+
+        /* ইনভয়েস ও কোটেশন টেবিলের নির্দিষ্ট কলাম প্রস্থ ও বর্ডার */
+        .invoice-item-table { table-layout: fixed; min-width: 360px; }
+        th.col-item, td.col-item { width: 32%; text-align: left; padding-left: 8px; }
+        th.col-qty, td.col-qty { width: 20%; }
+        th.col-rate, td.col-rate { width: 22%; }
+        th.col-total, td.col-total { width: 26%; }
+
+        /* ছকের ভেতরে এক্সট্রা বক্স ছাড়া সরাসরি ইনপুট ঘর */
+        .cell-input {
+            width: 100%;
+            height: 100%;
+            padding: 2px 4px;
+            margin: 0;
+            text-align: center;
+            border: none;
+            outline: none;
+            background: transparent;
+            box-sizing: border-box;
+            font-size: 12.5px;
+            color: #222;
+            box-shadow: none;
+        }
+        .cell-input:focus {
+            background: rgba(40, 167, 69, 0.06);
+            outline: none;
+            box-shadow: none;
+        }
+
+        /* অর্ডার ফর্মের ইনপুট */
+        .input-box { width: 100%; padding: 6px !important; text-align: center; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 12.5px; background: #fff; }
+        
+        .table-total-row { background: #fff9e6; font-weight: bold; text-align: right; }
+        .table-total-row td { text-align: right !important; padding-right: 10px; border: 1px solid #cfd4da; }
+
+        /* ক্রেতা ড্যাশবোর্ডের দোকান নির্বাচন ছক */
         .shop-grid-table { width: 100%; border-collapse: collapse; border: 1px solid #cfd4da; table-layout: fixed; min-width: 560px; }
         .shop-grid-table th, .shop-grid-table td { border: 1px solid #cfd4da; padding: 8px 6px; text-align: center; font-size: 12px; vertical-align: middle; word-break: normal; overflow-wrap: normal; }
         .shop-grid-table th { background-color: #28a745; color: #ffffff; font-weight: 600; }
@@ -97,17 +145,6 @@
         }
         .shop-address-scroll::-webkit-scrollbar { height: 4px; }
         .shop-address-scroll::-webkit-scrollbar-thumb { background: #adb5bd; border-radius: 4px; }
-        
-        th.col-item, td.col-item { width: 35%; text-align: left; padding-left: 10px; }
-        th.col-qty, td.col-qty { width: 25%; }
-        th.col-rate, td.col-rate { width: 20%; }
-        th.col-total, td.col-total { width: 20%; }
-
-        /* টেবিলের ভেতরের ইনপুট বক্স পরিষ্কার করা */
-        .input-box { width: 100%; padding: 6px !important; text-align: center; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 12.5px; background: #fff; }
-        
-        .table-total-row { background: #fff9e6; font-weight: bold; text-align: right; border: none; }
-        .table-total-row td { text-align: right !important; padding-right: 12px; border: none; }
 
         /* মেনুবার বা ট্যাব বোতাম ছোট করে দুই লাইনে সাজানো */
         .sub-nav-tabs { display: flex; gap: 6px; margin-bottom: 15px; background: #e9ecef; padding: 6px; border-radius: 6px; flex-wrap: wrap; width: 100%; box-sizing: border-box; overflow-x: auto; }
@@ -711,19 +748,19 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table>
+                        <table class="invoice-item-table">
                             <thead>
                                 <tr>
-                                    <th class="col-item">পণ্যের নাম</th>
-                                    <th class="col-qty">পরিমাণ ও একক</th>
-                                    <th style="width: 10%;">কাটুন</th>
+                                    <th style="width: 45%; text-align: left; padding-left: 8px;">পণ্যের নাম</th>
+                                    <th style="width: 40%;">পরিমাণ ও একক</th>
+                                    <th style="width: 15%;">বাতিল</th>
                                 </tr>
                             </thead>
                             <tbody id="customerOrderInputBody">
                                 <tr>
-                                    <td><input type="text" class="input-box cust-item-name" placeholder="পণ্যের নাম"></td>
-                                    <td><input type="text" class="input-box cust-item-qty" placeholder="পরিমাণ ও একক"></td>
-                                    <td><button type="button" onclick="this.parentElement.parentElement.remove()" style="background: #dc3545; color: white; border: none; padding: 5px 8px; cursor: pointer; border-radius: 4px; margin: 0; width: auto; font-size: 12px;">×</button></td>
+                                    <td><input type="text" class="cell-input cust-item-name" style="text-align: left;" placeholder="পণ্যের নাম"></td>
+                                    <td><input type="text" class="cell-input cust-item-qty" placeholder="পরিমাণ ও একক"></td>
+                                    <td><button type="button" onclick="this.parentElement.parentElement.remove()" style="background: #dc3545; color: white; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px; margin: 0; width: auto; font-size: 12px;">×</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1908,9 +1945,9 @@
         if(!tbody) return;
         let row = document.createElement('tr');
         row.innerHTML = `
-            <td><input type="text" class="input-box cust-item-name" placeholder="পণ্যের নাম"></td>
-            <td><input type="text" class="input-box cust-item-qty" placeholder="পরিমাণ ও একক"></td>
-            <td><button type="button" onclick="this.parentElement.parentElement.remove()" style="background: #dc3545; color: white; border: none; padding: 5px 8px; cursor: pointer; border-radius: 4px; margin: 0; width: auto; font-size: 12px;">×</button></td>
+            <td><input type="text" class="cell-input cust-item-name" style="text-align: left;" placeholder="পণ্যের নাম"></td>
+            <td><input type="text" class="cell-input cust-item-qty" placeholder="পরিমাণ ও একক"></td>
+            <td><button type="button" onclick="this.parentElement.parentElement.remove()" style="background: #dc3545; color: white; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px; margin: 0; width: auto; font-size: 12px;">×</button></td>
         `;
         tbody.appendChild(row);
     }
@@ -2060,7 +2097,7 @@
         else return Math.round(grandTotal * 0.05);
     }
 
-    /* ইনভয়েস হেডার: গ্রাহকের বিবরণ বামে এবং সোজাসুজি ডানে মার্চেন্টের বিবরণ (সব লাইন বাম দিক থেকে সোজা সারিবদ্ধ) */
+    /* ইনভয়েস হেডার (মার্চেন্টের বিবরণ ও পেমেন্ট মাধ্যম অপরিবর্তিত) */
     function renderInvoiceHeader(ord) {
         let custAddr = ord.customerAddress && ord.customerAddress !== 'ঠিকানা' ? ord.customerAddress : '';
         let shopAddr = ord.shopAddress && ord.shopAddress !== 'ঠিকানা' ? ord.shopAddress : '';
@@ -2164,8 +2201,8 @@
                     <tr>
                         <td class="col-item">${it.name}</td>
                         <td class="col-qty">${it.qtyStr}</td>
-                        <td class="col-rate"><input type="number" step="any" class="input-box merchant-rate" data-ord="${ord.ordIdx}" data-item="${itIdx}" value="${it.rate || ''}" placeholder="দর" oninput="calculateMerchantRow(${ord.ordIdx}, ${itIdx})"></td>
-                        <td class="col-total"><input type="number" step="any" class="input-box merchant-total" data-ord="${ord.ordIdx}" data-item="${itIdx}" value="${it.total || ''}" placeholder="মোট" oninput="calculateMerchantGrandTotal(${ord.ordIdx})"></td>
+                        <td class="col-rate"><input type="number" step="any" class="cell-input merchant-rate" data-ord="${ord.ordIdx}" data-item="${itIdx}" value="${it.rate || ''}" placeholder="দর" oninput="calculateMerchantRow(${ord.ordIdx}, ${itIdx})"></td>
+                        <td class="col-total"><input type="number" step="any" class="cell-input merchant-total" data-ord="${ord.ordIdx}" data-item="${itIdx}" value="${it.total || ''}" placeholder="মোট" oninput="calculateMerchantGrandTotal(${ord.ordIdx})"></td>
                     </tr>
                 `;
             } else {
@@ -2187,7 +2224,7 @@
 
         return `
             <div class="table-responsive">
-                <table>
+                <table class="invoice-item-table">
                     <thead>
                         <tr>
                             <th class="col-item">পণ্যের নাম</th>
